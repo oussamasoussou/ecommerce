@@ -1,0 +1,178 @@
+@extends('back-end.layouts.app')
+
+@section('title', 'Nouveau Slide - Admin')
+
+@section('content')
+<section class="content-main">
+    <div class="content-header d-flex justify-content-between align-items-center mb-4">
+        <h2 class="content-title mb-0">Nouveau Slide</h2>
+        <a href="{{ route('sliders.index') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Retour à la liste
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-light py-3">
+            <h5 class="card-title mb-0">Informations du slide</h5>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('sliders.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                
+                <div class="row">
+                    <!-- Informations de base -->
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <!-- Titre -->
+                            <div class="col-md-12 mb-4">
+                                <label class="form-label fw-semibold">Titre du slide <span class="text-danger">*</span></label>
+                                <input type="text" name="titre" 
+                                       value="{{ old('titre') }}" 
+                                       class="form-control @error('titre') is-invalid @enderror" 
+                                       placeholder="Ex: Nouvelle Collection, Soldes d'Été..." required>
+                                @error('titre')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Sous-titre -->
+                            <div class="col-md-12 mb-4">
+                                <label class="form-label fw-semibold">Sous-titre</label>
+                                <textarea name="sous_titre" rows="3" 
+                                          class="form-control @error('sous_titre') is-invalid @enderror" 
+                                          placeholder="Description courte du slide...">{{ old('sous_titre') }}</textarea>
+                                @error('sous_titre')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Ordre -->
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-semibold">Ordre d'affichage <span class="text-danger">*</span></label>
+                                <select name="ordre" class="form-select @error('ordre') is-invalid @enderror" required>
+                                    <option value="">-- Sélectionner l'ordre --</option>
+                                    @foreach($ordres as $ordre)
+                                        <option value="{{ $ordre }}" {{ old('ordre') == $ordre ? 'selected' : '' }}>
+                                            Position {{ $ordre }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('ordre')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Texte du bouton -->
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-semibold">Texte du bouton</label>
+                                <input type="text" name="texte_bouton" 
+                                       value="{{ old('texte_bouton') }}" 
+                                       class="form-control @error('texte_bouton') is-invalid @enderror" 
+                                       placeholder="Ex: Découvrir, Acheter maintenant...">
+                                @error('texte_bouton')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Lien -->
+                            <div class="col-md-12 mb-4">
+                                <label class="form-label fw-semibold">Lien de redirection</label>
+                                <input type="url" name="lien" 
+                                       value="{{ old('lien') }}" 
+                                       class="form-control @error('lien') is-invalid @enderror" 
+                                       placeholder="Ex: https://votresite.com/collection">
+                                @error('lien')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Statut -->
+                            <div class="col-md-12 mb-4">
+                                <div class="form-check form-switch">
+                                    <input type="checkbox" name="est_actif" 
+                                           class="form-check-input @error('est_actif') is-invalid @enderror" 
+                                           id="est_actif" 
+                                           value="1" 
+                                           {{ old('est_actif', true) ? 'checked' : '' }}>
+                                    <label class="form-check-label fw-semibold" for="est_actif">
+                                        Slide actif
+                                    </label>
+                                </div>
+                                @error('est_actif')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                                <small class="form-text text-muted">
+                                    Si activé, le slide sera visible sur le site
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Médias -->
+                    <div class="col-lg-4">
+                        <div class="sticky-top" style="top: 20px;">
+                            <!-- Image du slide -->
+                            <div class="card">
+                                <div class="card-header bg-light py-2">
+                                    <h6 class="mb-0">Image du slide <span class="text-danger">*</span></h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center mb-3">
+                                        <div id="imagePreviewContainer" class="border-2 border-dashed border-gray-300 rounded-lg p-4" style="display: none;">
+                                            <img id="imagePreview" src="#" alt="Aperçu de l'image" class="img-fluid rounded" style="max-height: 200px;">
+                                            <p class="text-muted mt-2 mb-0">Aperçu de l'image</p>
+                                        </div>
+                                        <div id="imagePlaceholder" class="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                                            <i class="bi bi-card-image text-muted" style="font-size: 2rem;"></i>
+                                            <p class="text-muted mt-2 mb-0">Aucune image sélectionnée</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <input type="file" name="image" id="imageInput" 
+                                           class="form-control @error('image') is-invalid @enderror" 
+                                           accept="image/*" required>
+                                    <small class="form-text text-muted">
+                                        Formats: JPG, PNG, GIF, WEBP (max 5MB)
+                                    </small>
+                                    @error('image')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Informations sur les dimensions -->
+                            <div class="card mt-4">
+                                <div class="card-header bg-light py-2">
+                                    <h6 class="mb-0">Recommandations</h6>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled small text-muted mb-0">
+                                        <li><i class="bi bi-info-circle me-1"></i> Format recommandé: 1920x600px</li>
+                                        <li><i class="bi bi-info-circle me-1"></i> Ratio: 16:5</li>
+                                        <li><i class="bi bi-info-circle me-1"></i> Poids max: 5MB</li>
+                                        <li><i class="bi bi-info-circle me-1"></i> Qualité optimale: HD</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{{ route('sliders.index') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle"></i> Annuler
+                            </a>
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="bi bi-plus-circle"></i> Créer le slide
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+@endsection
