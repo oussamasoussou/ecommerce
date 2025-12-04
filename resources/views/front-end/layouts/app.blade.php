@@ -165,7 +165,7 @@
 
         /* Ajoutez ceci dans votre fichier CSS */
         .product-image-slider img {
-            max-height: 700px;
+            max-height: 600px;
             /* Ajustez cette valeur selon vos besoins */
             width: auto;
             margin: 0 auto;
@@ -176,7 +176,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 700px;
+            height: 600px;
             /* Hauteur fixe pour le conteneur */
         }
 

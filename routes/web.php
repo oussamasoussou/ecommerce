@@ -4,6 +4,7 @@ use App\Http\Controllers\BackEnd\AuthController;
 use App\Http\Controllers\BackEnd\BanniereController;
 use App\Http\Controllers\BackEnd\CategoryController;
 use App\Http\Controllers\BackEnd\CouleurController;
+use App\Http\Controllers\BackEnd\DeliveryController;
 use App\Http\Controllers\BackEnd\MarqueController;
 use App\Http\Controllers\BackEnd\ProduitController;
 use App\Http\Controllers\BackEnd\SliderController;
@@ -102,6 +103,9 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::resource('marques', MarqueController::class);
+
+    Route::resource('deliveries', DeliveryController::class);
+
 
 });
 

@@ -94,6 +94,16 @@
                     <a href="{{ route('produits.create') }}">Ajouter un produit</a>
                 </div>
             </li>
+            <!-- Livraisons -->
+            <li class="menu-item has-submenu {{ request()->routeIs('produits.*') ? 'active' : '' }}"> 
+                <a class="menu-link" href="#"> 
+                    <i class="icon material-icons md-shopping_bag"></i> 
+                    <span class="text">Livraison</span> 
+                </a>
+                <div class="submenu">
+                    <a href="{{ route('deliveries.index') }}">prix des Livraison</a>
+                </div>
+            </li>
         </ul>
     </nav>
 </aside>
