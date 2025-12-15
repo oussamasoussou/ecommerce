@@ -127,4 +127,15 @@ class Produit extends Model
     {
         return $this->hasMany(ProduitImage::class);
     }
+
+    public function produitsAssocies()
+    {
+        return $this->belongsToMany(
+            Produit::class,
+            'produit_associes',
+            'produit_id',
+            'produit_associe_id'
+        )->where('est_actif', true);
+    }
+
 }

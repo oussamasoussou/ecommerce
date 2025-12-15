@@ -48,11 +48,52 @@ class ShopController extends Controller
         return view('front-end.shop.index', compact('produits', 'categories'));
     }
 
-    // Fiche produit
-    public function show(Produit $produit)
+    public function show($id)
     {
-        $produit->load(['variants.couleur', 'variants.taille', 'images', 'sousCategorie']);
-        $categories = SousCategorie::with('category')->get();
-        return view('front-end.shop.show', compact('produit', 'categories'));
+        $produit = Produit::with([
+            'images',
+            'variants.couleur',
+            'variants.taille',
+            'marque',
+            'sousCategorie',
+            'produitsAssocies.images',
+            'produitsAssocies.variants'
+        ])
+            ->where('id', $id)
+            ->where('est_actif', true)
+            ->firstOrFail();
+
+        // 1️⃣ Produits associés définis manuellement
+        $relatedProducts = $produit->produitsAssocies->take(4);
+
+        // 2️⃣ Fallback : même marque
+        if ($relatedProducts->count() < 4) {
+            $fallback = Produit::where('marque_id', $produit->marque_id)
+                ->where('id', '!=', $produit->id)
+                ->where('est_actif', true)
+                ->whereNotIn('id', $relatedProducts->pluck('id'))
+                ->inRandomOrder()
+                ->limit(4 - $relatedProducts->count())
+                ->get();
+
+            $relatedProducts = $relatedProducts->merge($fallback);
+        }
+
+        // 3️⃣ Fallback : même sous-catégorie
+        if ($relatedProducts->count() < 4) {
+            $fallback = Produit::where('sous_categorie_id', $produit->sous_categorie_id)
+                ->where('id', '!=', $produit->id)
+                ->where('est_actif', true)
+                ->whereNotIn('id', $relatedProducts->pluck('id'))
+                ->inRandomOrder()
+                ->limit(4 - $relatedProducts->count())
+                ->get();
+
+            $relatedProducts = $relatedProducts->merge($fallback);
+        }
+
+        return view('front-end.shop.show', compact('produit', 'relatedProducts'));
     }
+
+
 }
