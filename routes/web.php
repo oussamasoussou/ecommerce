@@ -124,7 +124,9 @@ Route::get('produits/shop/{produit}', [ShopController::class, 'show'])->name('pr
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop/{produit}', [ShopController::class, 'show'])->name('shop.show');
 
-// Routes du panier
+// Dans web.php
+Route::get('/produit/{id}', [ShopController::class, 'show'])->name('produit.show');
+
 // Routes du panier
 Route::prefix('cart')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('cart.index');
