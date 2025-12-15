@@ -157,3 +157,49 @@ Route::middleware('auth')->group(function () {
 
 // Orders admin/customer
 Route::resource('orders', OrderController::class)->only(['index', 'show']);
+
+// Route API pour les variants
+Route::get('/api/products/{id}/variants', function ($id) {
+    try {
+        $produit = \App\Models\Produit::with(['variants.couleur', 'variants.taille'])
+            ->where('id', $id)
+            ->firstOrFail();
+
+        // Filtrer uniquement les variants avec stock
+        $variantsWithStock = $produit->variants->filter(function ($variant) {
+            return $variant->quantite_variant > 0;
+        });
+
+        return response()->json([
+            'success' => true,
+            'variants' => $variantsWithStock->map(function ($variant) {
+                return [
+                    'id' => $variant->id,
+                    'couleur_id' => $variant->couleur_id,
+                    'couleur' => $variant->couleur ? [
+                        'id' => $variant->couleur->id,
+                        'name' => $variant->couleur->name,
+                        'code_hex' => $variant->couleur->code_hex
+                    ] : null,
+                    'taille_id' => $variant->taille_id,
+                    'taille' => $variant->taille ? [
+                        'id' => $variant->taille->id,
+                        'name' => $variant->taille->name
+                    ] : null,
+                    'prix_ttc_variant' => $variant->prix_ttc_variant,
+                    'prix_promotionnel_variant' => $variant->prix_promotionnel_variant,
+                    'quantite_variant' => $variant->quantite_variant
+                ];
+            }),
+            'stock' => $produit->stock
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Produit non trouvé'
+        ], 404);
+    }
+})->name('api.product.variants');
+
+Route::post('/cart/add-simple', [CartController::class, 'addSimple'])->name('cart.add.simple');
+

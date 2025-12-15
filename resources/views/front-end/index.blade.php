@@ -380,15 +380,30 @@
                                             <span>{{ number_format($produit->prix_ttc, 2) }} €</span>
                                         @endif
                                     </div>
+                                    <!-- Dans la boucle foreach des produits -->
                                     <div class="add-cart">
-                                        <form action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
-                                            @csrf
-                                            <input type="hidden" name="produit_id" value="{{ $produit->id }}">
-                                            <input type="hidden" name="qty" value="1">
-                                            <button type="submit" class="add" style="background: none; border: none; color: inherit; cursor: pointer;">
+                                        <!-- Pour les produits AVEC variants -->
+                                        @if($produit->avec_variant && $produit->variants->count() > 0)
+                                            <button type="button" class="add add-to-cart-modal-btn" 
+                                                    data-product-id="{{ $produit->id }}"
+                                                    data-product-name="{{ $produit->nom }}"
+                                                    data-product-image="{{ asset('storage/' . $produit->image) }}"
+                                                    data-product-price="{{ number_format($produit->prix_promotionnel ?? $produit->prix_ttc, 2, ',', ' ') }} €"
+                                                    data-product-old-price="{{ $produit->prix_promotionnel ? number_format($produit->prix_ttc, 2, ',', ' ') : '' }}"
+                                                    style="background: none; border: none; color: inherit; cursor: pointer;">
                                                 <i class="fi-rs-shopping-cart mr-5"></i>Ajouter
                                             </button>
-                                        </form>
+                                        @else
+                                        <!-- Pour les produits SANS variant -->
+                                            <form action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
+                                                @csrf
+                                                <input type="hidden" name="produit_id" value="{{ $produit->id }}">
+                                                <input type="hidden" name="qty" value="1">
+                                                <button type="submit" class="add" style="background: none; border: none; color: inherit; cursor: pointer;">
+                                                    <i class="fi-rs-shopping-cart mr-5"></i>Ajouter
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -412,5 +427,111 @@
 </section>
 <!-- End Products Tabs Section -->
 
+<!-- Modal d'ajout au panier avec variants - PAGE ACCUEIL -->
+<div class="modal fade custom-modal" id="addToCartModalHome" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sélectionnez les options</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addToCartModalFormHome" action="{{ route('cart.add') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="produit_id" id="modal_product_id_home">
+                    
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <div class="detail-gallery">
+                                <img src="" id="modal_product_image_home" alt="Produit" class="img-fluid" style="width: 100%; max-height: 400px; object-fit: contain;">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <div class="detail-info">
+                                <h2 class="title-detail" id="modal_product_name_home"></h2>
+                                <div class="product-price-cover">
+                                    <div class="product-price primary-color">
+                                        <span id="modal_product_price_home" class="current-price text-brand"></span>
+                                        <span id="modal_product_old_price_home" class="old-price"></span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Section des variants -->
+                                <div id="variants_section_home" style="display: none;">
+                                    <!-- Sélection de couleur -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Couleur <span class="text-danger">*</span></label>
+                                        <div class="color-options d-flex flex-wrap gap-2" id="color_options_home">
+                                            <!-- Les options de couleur seront générées ici -->
+                                        </div>
+                                        <input type="hidden" name="variant_id" id="selected_variant_id_home">
+                                        <div class="text-danger mt-1" id="color_error_home" style="display: none;">
+                                            Veuillez sélectionner une couleur
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Sélection de taille -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Taille <span class="text-danger">*</span></label>
+                                        <div class="size-options d-flex flex-wrap gap-2" id="size_options_home">
+                                            <!-- Les options de taille seront générées ici -->
+                                        </div>
+                                        <div class="text-danger mt-1" id="size_error_home" style="display: none;">
+                                            Veuillez sélectionner une taille
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Prix variant -->
+                                    <div class="mb-3" id="variant_price_section_home" style="display: none;">
+                                        <span class="text-muted">Prix: </span>
+                                        <span id="selected_variant_price_home" class="text-brand fw-bold"></span>
+                                    </div>
+                                    
+                                    <!-- Stock variant -->
+                                    <div class="mb-3" id="variant_stock_section_home" style="display: none;">
+                                        <span class="text-muted">Stock: </span>
+                                        <span id="selected_variant_stock_home" class="fw-bold"></span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Section pour produits sans variant -->
+                                <div id="no_variants_section_home" style="display: none;">
+                                    <div class="mb-3">
+                                        <span class="text-muted">Stock disponible: </span>
+                                        <span id="product_stock_home" class="fw-bold"></span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Quantité -->
+                                <div class="mb-4">
+                                    <label class="form-label">Quantité</label>
+                                    <div class="detail-qty border radius">
+                                        <a href="#" class="qty-down" id="modal_qty_down_home"><i class="fi-rs-angle-small-down"></i></a>
+                                        <input type="number" name="qty" class="qty-val" value="1" min="1" 
+                                            id="modal_product_qty_home" style="width: 60px; text-align: center;">
+                                        <a href="#" class="qty-up" id="modal_qty_up_home"><i class="fi-rs-angle-small-up"></i></a>
+                                    </div>
+                                </div>
+                                
+                                <!-- Message d'erreur -->
+                                <div class="alert alert-danger" id="variant_error_home" style="display: none;"></div>
+                                
+                                <!-- Bouton Ajouter -->
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="button button-add-to-cart flex-grow-1">
+                                        <i class="fi-rs-shopping-cart"></i> Ajouter au panier
+                                    </button>
+                                    <a href="#" id="view_details_link_home" class="button button-secondary">
+                                        Voir détails
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
     </main>
 @endsection

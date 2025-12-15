@@ -14,6 +14,7 @@ class Cart extends Model
         'user_id',
         'produit_id',
         'variant_id',
+        'variant_nom',
         'quantite',
         'prix_unitaire',
         'prix_total',
@@ -41,7 +42,6 @@ class Cart extends Model
     {
         return $this->belongsTo(ProduitVariant::class, 'variant_id');
     }
-
     // --- Méthodes statiques pour la gestion du panier ---
     public static function getCart()
     {
@@ -76,87 +76,86 @@ class Cart extends Model
     }
 
     // Dans la méthode addToCart de votre modèle Cart
-    public static function addToCart($produitId, $variantId = null, $quantite = 1)
+    public static function addToCart($produit_id, $variant_id, $qty = 1)
     {
-        // Récupérer le produit
-        $produit = Produit::findOrFail($produitId);
+        $session_id = session()->getId();
+        $produit = Produit::find($produit_id);
 
-        // Vérifier si c'est un produit avec variant
-        if ($variantId && $variantId !== 'null' && $variantId !== '') {
-            $variant = ProduitVariant::findOrFail($variantId);
-            $prix = $variant->prix_promotionnel_variant ?? $variant->prix_ttc_variant;
-            $stock = $variant->quantite_variant;
-        } else {
-            $prix = $produit->prix_promotionnel ?? $produit->prix_ttc;
-            $stock = $produit->quantite;
-            $variantId = null; // S'assurer que c'est vraiment null
+        if (!$produit) {
+            return ['success' => false, 'message' => 'Produit non trouvé'];
         }
 
-        // Vérifier le stock
-        if ($quantite > $stock) {
-            return [
-                'success' => false,
-                'message' => 'Stock insuffisant. Il ne reste que ' . $stock . ' articles.'
-            ];
-        }
+        // Calculer le prix
+        $prix_unitaire = $produit->prix_ttc;
+        $nom_variant = null;
 
-        // Identifier l'utilisateur ou la session
-        $userId = Auth::check() ? Auth::id() : null;
-        $sessionId = session()->getId();
+        if ($variant_id) {
+            $variant = ProduitVariant::with(['couleur', 'taille'])->find($variant_id);
+            if ($variant) {
+                // Utiliser le prix du variant si disponible
+                $prix_unitaire = $variant->prix_promotionnel_variant ?? $variant->prix_ttc_variant ?? $produit->prix_ttc;
 
-        // Vérifier si l'article existe déjà dans le panier
-        $cartItem = self::where('produit_id', $produitId)
-            ->where(function ($query) use ($variantId) {
-                if ($variantId) {
-                    $query->where('variant_id', $variantId);
-                } else {
-                    $query->whereNull('variant_id');
+                // Créer le nom du variant pour l'affichage
+                $nom_variant = '';
+                if ($variant->couleur) {
+                    $nom_variant .= 'Couleur: ' . $variant->couleur->name;
                 }
-            })
-            ->when($userId, function ($query) use ($userId) {
-                return $query->where('user_id', $userId);
-            })
-            ->when(!$userId, function ($query) use ($sessionId) {
-                return $query->where('session_id', $sessionId);
-            })
+                if ($variant->taille) {
+                    $nom_variant .= $nom_variant ? ' - Taille: ' . $variant->taille->name : 'Taille: ' . $variant->taille->name;
+                }
+            }
+        }
+
+        // Calculer le prix total
+        $prix_total = $prix_unitaire * $qty;
+
+        // Vérifier si l'article est déjà dans le panier
+        $existing = self::where('session_id', $session_id)
+            ->where('produit_id', $produit_id)
+            ->where('variant_id', $variant_id)
             ->first();
 
-        if ($cartItem) {
-            // Vérifier le stock total
-            $nouvelleQuantite = $cartItem->quantite + $quantite;
-            if ($nouvelleQuantite > $stock) {
-                return [
-                    'success' => false,
-                    'message' => 'Vous ne pouvez pas ajouter plus que le stock disponible (' . $stock . ')'
-                ];
+        if ($existing) {
+            // Mettre à jour la quantité
+            $existing->quantite += $qty;
+
+            // Vérifier le stock
+            if ($variant_id) {
+                $variant = ProduitVariant::find($variant_id);
+                if ($variant && $existing->quantite > $variant->quantite_variant) {
+                    return ['success' => false, 'message' => 'Quantité non disponible'];
+                }
+            } elseif ($existing->quantite > $produit->quantite) {
+                return ['success' => false, 'message' => 'Quantité non disponible'];
             }
 
-            // Mettre à jour la quantité
-            $cartItem->quantite = $nouvelleQuantite;
-            $cartItem->prix_total = $cartItem->quantite * $prix;
-            $cartItem->save();
-
-            $message = 'Quantité mise à jour dans le panier';
+            // Mettre à jour les prix
+            $existing->prix_total = $prix_unitaire * $existing->quantite;
+            $existing->save();
         } else {
-            // Créer un nouvel item
-            $cartItem = self::create([
-                'user_id' => $userId,
-                'session_id' => $userId ? null : $sessionId,
-                'produit_id' => $produitId,
-                'variant_id' => $variantId,
-                'quantite' => $quantite,
-                'prix_unitaire' => $prix,
-                'prix_total' => $prix * $quantite,
-            ]);
+            // Vérifier le stock
+            if ($variant_id) {
+                $variant = ProduitVariant::find($variant_id);
+                if ($variant && $qty > $variant->quantite_variant) {
+                    return ['success' => false, 'message' => 'Quantité non disponible'];
+                }
+            } elseif ($qty > $produit->quantite) {
+                return ['success' => false, 'message' => 'Quantité non disponible'];
+            }
 
-            $message = 'Produit ajouté au panier';
+            // Créer un nouvel élément avec TOUS les champs requis
+            self::create([
+                'session_id' => $session_id,
+                'produit_id' => $produit_id,
+                'variant_id' => $variant_id,
+                'variant_nom' => $nom_variant,
+                'quantite' => $qty,
+                'prix_unitaire' => $prix_unitaire,
+                'prix_total' => $prix_total
+            ]);
         }
 
-        return [
-            'success' => true,
-            'message' => $message,
-            'cart_item' => $cartItem
-        ];
+        return ['success' => true, 'message' => 'Produit ajouté au panier'];
     }
 
     public static function updateQuantity($cartId, $quantite)

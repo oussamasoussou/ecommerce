@@ -14,8 +14,8 @@ class Produit extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'sous_categorie_id', 
-        'marque_id', 
+        'sous_categorie_id',
+        'marque_id',
         'nom',
         'description',
         'quantite',
@@ -75,6 +75,14 @@ class Produit extends Model
         return $this->hasMany(ProduitVariant::class, 'produit_id');
     }
 
+    public function getStockAttribute()
+    {
+        if ($this->avec_variant) {
+            return $this->variants->sum('quantite_variant');
+        }
+        return $this->quantite;
+    }
+
     /**
      * Relation avec la wishlist
      */
@@ -91,7 +99,7 @@ class Produit extends Model
         if (!auth()->check()) {
             return false;
         }
-        
+
         return $this->wishlists()
             ->where('user_id', auth()->id())
             ->exists();

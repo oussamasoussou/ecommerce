@@ -163,30 +163,28 @@
                                         @csrf
                                         <input type="hidden" name="produit_id" value="{{ $produit->id }}">
                                         
-                                        @if($produit->avec_variant && $produit->variants->count() > 0)
-                                            <div class="mb-3">
-                                                <label for="variant_id" class="form-label">Options disponibles :</label>
-                                                <select name="variant_id" id="variant_id" class="form-select" required>
-                                                    <option value="">Sélectionnez une option</option>
-                                                    @foreach($produit->variants as $variant)
-                                                        <option value="{{ $variant->id }}" 
-                                                                data-price="{{ $variant->prix_promotionnel_variant ?? $variant->prix_ttc_variant }}"
-                                                                data-stock="{{ $variant->quantite_variant }}">
-                                                            @if($variant->couleur)
-                                                                Couleur: {{ $variant->couleur->name }}
-                                                            @endif
-                                                            @if($variant->taille)
-                                                                - Taille: {{ $variant->taille->name }}
-                                                            @endif
-                                                            - {{ number_format($variant->prix_promotionnel_variant ?? $variant->prix_ttc_variant, 2, ',', ' ') }} €
-                                                            ({{ $variant->quantite_variant }} en stock)
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        @else
-                                            <input type="hidden" name="variant_id" value="">
-                                        @endif
+                                        <!-- Pour les produits AVEC variants -->
+                                            @if($produit->avec_variant && $produit->variants->count() > 0)
+                                                <button type="button" class="add add-to-cart-modal-btn" 
+                                                        data-product-id="{{ $produit->id }}"
+                                                        data-product-name="{{ $produit->nom }}"
+                                                        data-product-image="{{ asset('storage/' . $produit->image) }}"
+                                                        data-product-price="{{ number_format($produit->prix_promotionnel ?? $produit->prix_ttc, 2, ',', ' ') }} €"
+                                                        data-product-old-price="{{ $produit->prix_promotionnel ? number_format($produit->prix_ttc, 2, ',', ' ') : '' }}"
+                                                        style="background: none; border: none; color: inherit; cursor: pointer;">
+                                                    <i class="fi-rs-shopping-cart mr-5"></i>Ajouter
+                                                </button>
+                                            @else
+                                            <!-- Pour les produits SANS variant -->
+                                                <form action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
+                                                    @csrf
+                                                    <input type="hidden" name="produit_id" value="{{ $produit->id }}">
+                                                    <input type="hidden" name="qty" value="1">
+                                                    <button type="submit" class="add" style="background: none; border: none; color: inherit; cursor: pointer;">
+                                                        <i class="fi-rs-shopping-cart mr-5"></i>Ajouter
+                                                    </button>
+                                                </form>
+                                            @endif
                                         
                                         <div class="detail-extralink mb-50 align-items-center justify-content-between" style="gap: 20px;">
                                             <div class="detail-qty border radius">
