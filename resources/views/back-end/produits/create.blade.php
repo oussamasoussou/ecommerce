@@ -49,6 +49,28 @@
                                 <label class="form-label fw-bold">Description</label>
                                 <textarea name="description" rows="3" class="form-control"></textarea>
                             </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Description longue</label>
+                                <textarea
+                                    name="long_description"
+                                    rows="6"
+                                    class="form-control"
+                                    placeholder="Description détaillée du produit">
+                                    {{ old('long_description') }}
+                                </textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Informations additionnelles</label>
+                                <textarea
+                                    name="additional_info"
+                                    rows="4"
+                                    class="form-control"
+                                    placeholder="Matière, dimensions, entretien, origine, etc.">
+                                    {{ old('additional_info') }}
+                                </textarea>
+                            </div>
+
 
                             <!-- Image principale & Images supplémentaires -->
                             <div class="row g-3 mb-3">

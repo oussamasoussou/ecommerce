@@ -223,10 +223,7 @@
                                         <a class="nav-link" id="Additional-info-tab" data-bs-toggle="tab"
                                             href="#Additional-info">Additional info</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="Vendor-info-tab" data-bs-toggle="tab"
-                                            href="#Vendor-info">Vendor</a>
-                                    </li>
+                                 
                                     <li class="nav-item">
                                         <a class="nav-link" id="Reviews-tab" data-bs-toggle="tab" href="#Reviews">avis
                                             ({{ $produit->reviews_count }})</a>
@@ -234,18 +231,16 @@
                                 </ul>
                                 <div class="tab-content shop_info_tab entry-main-content">
                                     <div class="tab-pane fade show active" id="Description">
-                                        <p>{{ $produit->long_description }}</p>
+                                        <p>{{ $produit->long_description ?? 'Pas de description disponible.' }}</p>
                                     </div>
                                     <div class="tab-pane fade" id="Additional-info">
-                                        <table class="font-md">
-                                            <tbody>
-
-                                            </tbody>
-                                        </table>
+                                        @if($produit->additional_info)
+                                            <p>{{ $produit->additional_info }}</p>
+                                        @else
+                                            <p>Aucune information additionnelle disponible.</p>
+                                        @endif
                                     </div>
-                                    <div class="tab-pane fade" id="Vendor-info">
-                                        <p>{{ $produit->vendor->description ?? '' }}</p>
-                                    </div>
+                                    
                                     <div class="tab-pane fade" id="Reviews">
 
                                     </div>

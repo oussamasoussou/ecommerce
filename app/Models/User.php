@@ -30,7 +30,9 @@ class User extends Authenticatable
         'city',
         'country',
         'last_login_at',
-        'email_verified_at'
+        'email_verified_at',
+        'provider',
+        'provider_id',
     ];
 
 
