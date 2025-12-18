@@ -61,6 +61,8 @@ class ProduitController extends Controller
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
                 'images_supplementaires' => 'nullable|array', // Correction importante
                 'images_supplementaires.*' => 'image|mimes:jpeg,png,jpg,webp',
+                'long_description' => 'nullable|string',
+                'additional_info' => 'nullable|string',
             ];
 
             if ($avecVariant) {
@@ -105,6 +107,8 @@ class ProduitController extends Controller
             $produit->est_actif = $request->boolean('est_actif');
             $produit->avec_variant = $avecVariant;
             $produit->image = $imagePath;
+            $produit->long_description = $request->long_description;
+            $produit->additional_info = $request->additional_info;
             $produit->quantite = $avecVariant ? 0 : $request->quantite;
 
             $produit->save();
@@ -165,7 +169,7 @@ class ProduitController extends Controller
                         }
                     }
                 }
-         
+
                 // Mise à jour du stock total du produit
                 $produit->quantite = $totalStock;
                 $produit->save();
@@ -211,6 +215,8 @@ class ProduitController extends Controller
                 'poids' => 'nullable|numeric|min:0',
                 'est_actif' => 'sometimes|boolean',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
+                'long_description' => 'nullable|string',
+                'additional_info' => 'nullable|string',
             ];
 
             if ($avecVariant) {
@@ -246,6 +252,8 @@ class ProduitController extends Controller
                 'est_actif' => $request->boolean('est_actif'),
                 'avec_variant' => $avecVariant,
                 'quantite' => $avecVariant ? 0 : $request->quantite,
+                'long_description' => $request->long_description,
+                'additional_info' => $request->additional_info,
             ]);
 
             // Après la création du produit

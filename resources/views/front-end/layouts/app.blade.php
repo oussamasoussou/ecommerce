@@ -25,8 +25,33 @@
 
 
     <style>
+        .product-cart-wrap {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            /* prend toute la hauteur du parent */
+        }
 
-        
+        .product-img-action-wrap {
+            flex-shrink: 0;
+            /* l'image ne rétrécit pas */
+        }
+
+        .product-content-wrap {
+            flex-grow: 0.5;
+            /* le contenu prend tout l'espace restant */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-card-bottom {
+            margin-top: auto;
+            /* pousse le prix et le bouton en bas */
+        }
+
+
+
         /* Styles pour le modal d'ajout au panier */
         #addToCartModal .modal-content {
             border-radius: 15px;
@@ -722,6 +747,48 @@
             color: #fff;
             transform: translateX(5px);
         }
+
+        .social-login .separator {
+            position: relative;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .social-login .separator::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: #e0e0e0;
+            z-index: -1;
+        }
+
+        .social-login .separator span {
+            background-color: white;
+            padding: 0 15px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .btn-google {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+        }
+
+        .btn-google:hover {
+            background-color: #f8f9fa;
+            border-color: #ccc;
+        }
+
+        .btn-facebook {
+            background-color: #1877f2;
+        }
+
+        .btn-facebook:hover {
+            background-color: #166fe5;
+        }
     </style>
 
 </head>
@@ -1309,77 +1376,77 @@
             });
         });
     </script>
-   <script>
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Script panier global chargé');
-    
-    // ------------------------------------------------------------
-    // 1. GESTION DU PANIER DANS LE HEADER (mini-panier)
-    // ------------------------------------------------------------
-    
-    // Fonction pour mettre à jour le compteur du panier
-    function updateCartCount(count) {
-        // Mettre à jour tous les compteurs de panier
-        document.querySelectorAll('.cart-count').forEach(el => {
-            el.textContent = count || 0;
-        });
-        
-        // Mettre à jour le mini-panier dans le header
-        updateMiniCart();
-    }
-    
-    // Fonction pour mettre à jour le contenu du mini-panier
-    function updateMiniCart() {
-        // Optionnel: Recharger dynamiquement le contenu du mini-panier
-        // fetch('/cart/mini-cart')
-        //     .then(response => response.text())
-        //     .then(html => {
-        //         document.getElementById('mini-cart-items').innerHTML = html;
-        //     });
-    }
-    
-    // Fonction pour animer l'icône du panier
-    function animateCartIcon() {
-        const cartIcons = document.querySelectorAll('.mini-cart-icon');
-        cartIcons.forEach(icon => {
-            icon.classList.add('animate');
-            setTimeout(() => {
-                icon.classList.remove('animate');
-            }, 500);
-        });
-    }
-    
-    // Gestion de la suppression dans le mini-panier
-    document.addEventListener('click', function(e) {
-        if (e.target.closest('.remove-mini-cart')) {
-            e.preventDefault();
-            const removeBtn = e.target.closest('.remove-mini-cart');
-            const cartId = removeBtn.dataset.cartId;
-            
-            if (confirm('Retirer cet article du panier ?')) {
-                fetch(`/cart/${cartId}/remove`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Supprimer l'élément du DOM
-                        const listItem = removeBtn.closest('li');
-                        if (listItem) {
-                            listItem.remove();
-                        }
-                        
-                        // Mettre à jour le compteur
-                        updateCartCount(data.cart_count);
-                        
-                        // Vérifier si le panier est vide
-                        const miniCartItems = document.getElementById('mini-cart-items');
-                        if (miniCartItems && miniCartItems.children.length === 0) {
-                            miniCartItems.innerHTML = `
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('Script panier global chargé');
+
+            // ------------------------------------------------------------
+            // 1. GESTION DU PANIER DANS LE HEADER (mini-panier)
+            // ------------------------------------------------------------
+
+            // Fonction pour mettre à jour le compteur du panier
+            function updateCartCount(count) {
+                // Mettre à jour tous les compteurs de panier
+                document.querySelectorAll('.cart-count').forEach(el => {
+                    el.textContent = count || 0;
+                });
+
+                // Mettre à jour le mini-panier dans le header
+                updateMiniCart();
+            }
+
+            // Fonction pour mettre à jour le contenu du mini-panier
+            function updateMiniCart() {
+                // Optionnel: Recharger dynamiquement le contenu du mini-panier
+                // fetch('/cart/mini-cart')
+                //     .then(response => response.text())
+                //     .then(html => {
+                //         document.getElementById('mini-cart-items').innerHTML = html;
+                //     });
+            }
+
+            // Fonction pour animer l'icône du panier
+            function animateCartIcon() {
+                const cartIcons = document.querySelectorAll('.mini-cart-icon');
+                cartIcons.forEach(icon => {
+                    icon.classList.add('animate');
+                    setTimeout(() => {
+                        icon.classList.remove('animate');
+                    }, 500);
+                });
+            }
+
+            // Gestion de la suppression dans le mini-panier
+            document.addEventListener('click', function (e) {
+                if (e.target.closest('.remove-mini-cart')) {
+                    e.preventDefault();
+                    const removeBtn = e.target.closest('.remove-mini-cart');
+                    const cartId = removeBtn.dataset.cartId;
+
+                    if (confirm('Retirer cet article du panier ?')) {
+                        fetch(`/cart/${cartId}/remove`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                            }
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    // Supprimer l'élément du DOM
+                                    const listItem = removeBtn.closest('li');
+                                    if (listItem) {
+                                        listItem.remove();
+                                    }
+
+                                    // Mettre à jour le compteur
+                                    updateCartCount(data.cart_count);
+
+                                    // Vérifier si le panier est vide
+                                    const miniCartItems = document.getElementById('mini-cart-items');
+                                    if (miniCartItems && miniCartItems.children.length === 0) {
+                                        miniCartItems.innerHTML = `
                                 <li class="text-center py-3">
                                     <p class="text-muted">Votre panier est vide</p>
                                     <a href="{{ route('shop.index') }}" class="btn btn-sm btn-fill-out">
@@ -1387,552 +1454,552 @@ document.addEventListener('DOMContentLoaded', function() {
                                     </a>
                                 </li>
                             `;
+                                    }
+
+                                    showSuccessMessage('Article retiré du panier');
+                                } else {
+                                    showErrorMessage(data.message);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Erreur:', error);
+                                showErrorMessage('Erreur lors de la suppression');
+                            });
+                    }
+                }
+            });
+
+            // ------------------------------------------------------------
+            // 2. GESTION DES FORMULAIRES SIMPLES D'AJOUT AU PANIER
+            // ------------------------------------------------------------
+
+            document.addEventListener('submit', function (e) {
+                if (e.target && e.target.classList.contains('add-to-cart-form')) {
+                    e.preventDefault();
+
+                    const form = e.target;
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+
+                    // Désactiver le bouton pendant la requête
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fi-rs-loading mr-5"></i>Ajout...';
+
+                    // Récupérer les données du formulaire
+                    const formData = new FormData(form);
+
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
                         }
-                        
-                        showSuccessMessage('Article retiré du panier');
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Mettre à jour le compteur du panier
+                                updateCartCount(data.cart_count);
+
+                                // Animer l'icône du panier
+                                animateCartIcon();
+
+                                // Afficher un message de succès
+                                showSuccessMessage('Produit ajouté au panier !');
+                            } else {
+                                // Afficher un message d'erreur
+                                showErrorMessage(data.message || 'Erreur lors de l\'ajout au panier');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur:', error);
+                            showErrorMessage('Une erreur est survenue');
+                        })
+                        .finally(() => {
+                            // Réactiver le bouton
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalText;
+                        });
+                }
+            });
+
+            // ------------------------------------------------------------
+            // 3. GESTION DES FORMULAIRES SUR LA PAGE DE DÉTAIL
+            // ------------------------------------------------------------
+
+            const detailForm = document.getElementById('add-to-cart-form');
+            if (detailForm) {
+                detailForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    const form = e.target;
+                    const variantSelect = document.getElementById('variant_id');
+                    const qtyInput = document.getElementById('product-qty');
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+
+                    // Validation
+                    if (variantSelect && !variantSelect.value) {
+                        showErrorMessage('Veuillez sélectionner une option');
+                        return;
+                    }
+
+                    if (parseInt(qtyInput.value) < 1) {
+                        showErrorMessage('Quantité invalide');
+                        return;
+                    }
+
+                    // Désactiver le bouton pendant la requête
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fi-rs-loading mr-5"></i>Ajout...';
+
+                    // Récupérer les données du formulaire
+                    const formData = new FormData(form);
+
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Mettre à jour le compteur du panier
+                                updateCartCount(data.cart_count);
+
+                                // Animer l'icône du panier
+                                animateCartIcon();
+
+                                // Afficher un message de succès
+                                showSuccessMessage('Produit ajouté au panier !');
+
+                                // Optionnel: redirection vers le panier
+                                // setTimeout(() => {
+                                //     window.location.href = '{{ route("cart.index") }}';
+                                // }, 1500);
+                            } else {
+                                // Afficher un message d'erreur
+                                showErrorMessage(data.message || 'Erreur lors de l\'ajout au panier');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur:', error);
+                            showErrorMessage('Une erreur est survenue');
+                        })
+                        .finally(() => {
+                            // Réactiver le bouton
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalText;
+                        });
+                });
+
+                // Gestion du changement de variant pour mettre à jour le stock max
+                const variantSelect = document.getElementById('variant_id');
+                const qtyInput = document.getElementById('product-qty');
+
+                if (variantSelect && qtyInput) {
+                    variantSelect.addEventListener('change', function () {
+                        const selectedOption = this.options[this.selectedIndex];
+                        if (selectedOption.value) {
+                            const stock = parseInt(selectedOption.dataset.stock);
+                            qtyInput.max = stock;
+
+                            // Réinitialiser la quantité si elle dépasse le stock
+                            if (parseInt(qtyInput.value) > stock) {
+                                qtyInput.value = stock;
+                            }
+                        }
+                    });
+                }
+            }
+
+            // ------------------------------------------------------------
+            // 4. FONCTIONS UTILITAIRES
+            // ------------------------------------------------------------
+
+            function showSuccessMessage(message) {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Succès',
+                        text: message,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    });
+                } else if (typeof toastr !== 'undefined') {
+                    toastr.success(message);
+                } else {
+                    alert(message);
+                }
+            }
+
+            function showErrorMessage(message) {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erreur',
+                        text: message,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                } else if (typeof toastr !== 'undefined') {
+                    toastr.error(message);
+                } else {
+                    alert(message);
+                }
+            }
+
+            // ------------------------------------------------------------
+            // 5. INITIALISATION DES MODALS D'AJOUT AU PANIER
+            // ------------------------------------------------------------
+
+            // Attendre que le DOM soit complètement chargé
+            setTimeout(() => {
+                if (document.querySelector('.add-to-cart-modal-btn')) {
+                    console.log('Initialisation des modals d\'ajout au panier...');
+                    initializeAddToCartModals();
+                }
+            }, 100);
+        });
+
+        // ------------------------------------------------------------
+        // FONCTION PRINCIPALE POUR LES MODALS D'AJOUT AU PANIER
+        // ------------------------------------------------------------
+        function initializeAddToCartModals() {
+            console.log('Recherche des modals sur la page...');
+
+            // Liste de tous les modals possibles avec leurs sélecteurs
+            const modalConfigs = [
+                {
+                    id: 'addToCartModalHome',
+                    modalSelector: '#addToCartModalHome',
+                    prefix: 'home_'
+                },
+                {
+                    id: 'addToCartModal',
+                    modalSelector: '#addToCartModal',
+                    prefix: ''
+                }
+            ];
+
+            // Trouver quel modal existe sur cette page
+            let activeModal = null;
+            let modalPrefix = '';
+
+            for (const config of modalConfigs) {
+                const modalElement = document.querySelector(config.modalSelector);
+                if (modalElement) {
+                    activeModal = modalElement;
+                    modalPrefix = config.prefix;
+                    console.log(`Modal trouvé: ${config.id} avec préfixe: ${modalPrefix}`);
+                    break;
+                }
+            }
+
+            if (!activeModal) {
+                console.log('Aucun modal d\'ajout au panier trouvé sur cette page');
+                return;
+            }
+
+            // Construire les sélecteurs complets
+            const selectors = {
+                modal: activeModal,
+                form: `#addToCartModalForm${modalPrefix ? 'Home' : ''}`,
+                productId: `#modal_product_id${modalPrefix}`,
+                productName: `#modal_product_name${modalPrefix}`,
+                productImage: `#modal_product_image${modalPrefix}`,
+                productPrice: `#modal_product_price${modalPrefix}`,
+                productOldPrice: `#modal_product_old_price${modalPrefix}`,
+                viewDetailsLink: `#view_details_link${modalPrefix}`,
+                selectedVariantId: `#selected_variant_id${modalPrefix}`,
+                modalProductQty: `#modal_product_qty${modalPrefix}`,
+                colorError: `#color_error${modalPrefix}`,
+                sizeError: `#size_error${modalPrefix}`,
+                variantError: `#variant_error${modalPrefix}`,
+                colorOptions: `#color_options${modalPrefix}`,
+                sizeOptions: `#size_options${modalPrefix}`,
+                priceSection: `#variant_price_section${modalPrefix}`,
+                stockSection: `#variant_stock_section${modalPrefix}`,
+                selectedVariantPrice: `#selected_variant_price${modalPrefix}`,
+                selectedVariantStock: `#selected_variant_stock${modalPrefix}`,
+                variantsSection: `#variants_section${modalPrefix}`,
+                noVariantsSection: `#no_variants_section${modalPrefix}`,
+                productStock: `#product_stock${modalPrefix}`,
+                qtyDown: `#modal_qty_down${modalPrefix}`,
+                qtyUp: `#modal_qty_up${modalPrefix}`
+            };
+
+            // ------------------------------------------------------------
+            // 1. GESTION DES BOUTONS D'OUVERTURE DE MODAL
+            // ------------------------------------------------------------
+            document.addEventListener('click', function (e) {
+                const addToCartBtn = e.target.closest('.add-to-cart-modal-btn');
+                if (addToCartBtn) {
+                    e.preventDefault();
+                    openAddToCartModal(addToCartBtn, selectors, activeModal);
+                }
+            });
+
+            // ------------------------------------------------------------
+            // 2. GESTION DES BOUTONS DE QUANTITÉ
+            // ------------------------------------------------------------
+            const qtyDownBtn = document.querySelector(selectors.qtyDown);
+            const qtyUpBtn = document.querySelector(selectors.qtyUp);
+            const qtyInput = document.querySelector(selectors.modalProductQty);
+
+            if (qtyDownBtn && qtyInput) {
+                qtyDownBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const currentValue = parseInt(qtyInput.value) || 1;
+                    if (currentValue > 1) {
+                        qtyInput.value = currentValue - 1;
+                    }
+                });
+            }
+
+            if (qtyUpBtn && qtyInput) {
+                qtyUpBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const currentValue = parseInt(qtyInput.value) || 1;
+                    const maxValue = parseInt(qtyInput.max) || 999;
+                    if (currentValue < maxValue) {
+                        qtyInput.value = currentValue + 1;
+                    }
+                });
+            }
+
+            // ------------------------------------------------------------
+            // 3. GESTION DE LA SOUMISSION DU FORMULAIRE
+            // ------------------------------------------------------------
+            const form = document.querySelector(selectors.form);
+            if (form) {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    submitModalForm(this, selectors, activeModal);
+                });
+            }
+        }
+
+        // ------------------------------------------------------------
+        // FONCTIONS AUXILIAIRES POUR LES MODALS
+        // ------------------------------------------------------------
+
+        function openAddToCartModal(btn, selectors, modalElement) {
+            // Récupérer les données du produit
+            const productData = {
+                id: btn.dataset.productId,
+                name: btn.dataset.productName,
+                image: btn.dataset.productImage,
+                price: btn.dataset.productPrice,
+                oldPrice: btn.dataset.productOldPrice
+            };
+
+            console.log('Ouverture du modal pour:', productData.name);
+
+            // Mettre à jour les informations du produit
+            updateProductInfo(productData, selectors);
+
+            // Réinitialiser le modal
+            resetModal(selectors);
+
+            // Charger les variants du produit
+            loadProductVariants(productData.id, selectors);
+
+            // Afficher le modal
+            if (typeof bootstrap !== 'undefined') {
+                const modalInstance = new bootstrap.Modal(modalElement);
+                modalInstance.show();
+            } else {
+                // Fallback si Bootstrap n'est pas chargé
+                modalElement.style.display = 'block';
+                modalElement.classList.add('show');
+            }
+        }
+
+        function updateProductInfo(productData, selectors) {
+            // Fonction utilitaire pour mettre à jour un élément
+            function updateElement(selector, property, value) {
+                const element = document.querySelector(selector);
+                if (element) {
+                    if (property === 'textContent') {
+                        element.textContent = value;
+                    } else if (property === 'value') {
+                        element.value = value;
+                    } else if (property === 'src') {
+                        element.src = value;
+                    } else if (property === 'href') {
+                        element.href = value;
+                    }
+                }
+            }
+
+            // Mettre à jour tous les éléments
+            updateElement(selectors.productId, 'value', productData.id);
+            updateElement(selectors.productName, 'textContent', productData.name);
+            updateElement(selectors.productImage, 'src', productData.image);
+            updateElement(selectors.productPrice, 'textContent', productData.price);
+            updateElement(selectors.viewDetailsLink, 'href', `/shop/${productData.id}`);
+
+            // Gestion de l'ancien prix
+            const oldPriceElement = document.querySelector(selectors.productOldPrice);
+            if (oldPriceElement) {
+                if (productData.oldPrice && productData.oldPrice.trim() !== '') {
+                    oldPriceElement.textContent = productData.oldPrice;
+                    oldPriceElement.style.display = 'inline';
+                } else {
+                    oldPriceElement.style.display = 'none';
+                }
+            }
+        }
+
+        function resetModal(selectors) {
+            console.log('Réinitialisation du modal');
+
+            // Fonction utilitaire pour manipuler les éléments
+            function handleElement(selector, action, value = null) {
+                const element = document.querySelector(selector);
+                if (!element) return;
+
+                switch (action) {
+                    case 'hide':
+                        element.style.display = 'none';
+                        break;
+                    case 'show':
+                        element.style.display = 'block';
+                        break;
+                    case 'clear':
+                        element.innerHTML = '';
+                        break;
+                    case 'setValue':
+                        element.value = value;
+                        break;
+                    case 'setMax':
+                        element.max = value;
+                        break;
+                }
+            }
+
+            // Réinitialiser les champs
+            handleElement(selectors.selectedVariantId, 'setValue', '');
+            handleElement(selectors.modalProductQty, 'setValue', 1);
+            handleElement(selectors.modalProductQty, 'setMax', 999);
+
+            // Masquer les messages d'erreur
+            handleElement(selectors.colorError, 'hide');
+            handleElement(selectors.sizeError, 'hide');
+            handleElement(selectors.variantError, 'hide');
+
+            // Masquer les sections d'info variant
+            handleElement(selectors.priceSection, 'hide');
+            handleElement(selectors.stockSection, 'hide');
+
+            // Vider les options
+            handleElement(selectors.colorOptions, 'clear');
+            handleElement(selectors.sizeOptions, 'clear');
+
+            // Masquer les sections de variant
+            handleElement(selectors.variantsSection, 'hide');
+            handleElement(selectors.noVariantsSection, 'hide');
+        }
+
+        function loadProductVariants(productId, selectors) {
+            console.log(`Chargement des variants pour ${productId}`);
+
+            fetch(`/api/products/${productId}/variants`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Erreur HTTP: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Données reçues:', data);
+
+                    if (data.success) {
+                        if (data.variants && data.variants.length > 0) {
+                            // Produit avec variants
+                            document.querySelector(selectors.variantsSection).style.display = 'block';
+                            generateVariantOptions(data.variants, selectors);
+                        } else {
+                            // Produit sans variant
+                            document.querySelector(selectors.noVariantsSection).style.display = 'block';
+
+                            const stockElement = document.querySelector(selectors.productStock);
+                            const qtyInput = document.querySelector(selectors.modalProductQty);
+
+                            if (stockElement) {
+                                stockElement.textContent = `${data.stock} articles`;
+                            }
+
+                            if (qtyInput && data.stock) {
+                                qtyInput.max = data.stock;
+                            }
+                        }
                     } else {
-                        showErrorMessage(data.message);
+                        showModalError(selectors.variantError, data.message || 'Erreur lors du chargement des options');
                     }
                 })
                 .catch(error => {
                     console.error('Erreur:', error);
-                    showErrorMessage('Erreur lors de la suppression');
+                    showModalError(selectors.variantError, 'Impossible de charger les options. Veuillez réessayer.');
                 });
-            }
         }
-    });
-    
-    // ------------------------------------------------------------
-    // 2. GESTION DES FORMULAIRES SIMPLES D'AJOUT AU PANIER
-    // ------------------------------------------------------------
-    
-    document.addEventListener('submit', function(e) {
-        if (e.target && e.target.classList.contains('add-to-cart-form')) {
-            e.preventDefault();
-            
-            const form = e.target;
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            
-            // Désactiver le bouton pendant la requête
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fi-rs-loading mr-5"></i>Ajout...';
-            
-            // Récupérer les données du formulaire
-            const formData = new FormData(form);
-            
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Mettre à jour le compteur du panier
-                    updateCartCount(data.cart_count);
-                    
-                    // Animer l'icône du panier
-                    animateCartIcon();
-                    
-                    // Afficher un message de succès
-                    showSuccessMessage('Produit ajouté au panier !');
-                } else {
-                    // Afficher un message d'erreur
-                    showErrorMessage(data.message || 'Erreur lors de l\'ajout au panier');
-                }
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
-                showErrorMessage('Une erreur est survenue');
-            })
-            .finally(() => {
-                // Réactiver le bouton
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
-            });
-        }
-    });
-    
-    // ------------------------------------------------------------
-    // 3. GESTION DES FORMULAIRES SUR LA PAGE DE DÉTAIL
-    // ------------------------------------------------------------
-    
-    const detailForm = document.getElementById('add-to-cart-form');
-    if (detailForm) {
-        detailForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const form = e.target;
-            const variantSelect = document.getElementById('variant_id');
-            const qtyInput = document.getElementById('product-qty');
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            
-            // Validation
-            if (variantSelect && !variantSelect.value) {
-                showErrorMessage('Veuillez sélectionner une option');
+
+        function generateVariantOptions(variants, selectors) {
+            const colorOptionsDiv = document.querySelector(selectors.colorOptions);
+            const sizeOptionsDiv = document.querySelector(selectors.sizeOptions);
+
+            if (!colorOptionsDiv || !sizeOptionsDiv) {
+                console.error('Conteneurs d\'options non trouvés');
                 return;
             }
-            
-            if (parseInt(qtyInput.value) < 1) {
-                showErrorMessage('Quantité invalide');
-                return;
-            }
-            
-            // Désactiver le bouton pendant la requête
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fi-rs-loading mr-5"></i>Ajout...';
-            
-            // Récupérer les données du formulaire
-            const formData = new FormData(form);
-            
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Mettre à jour le compteur du panier
-                    updateCartCount(data.cart_count);
-                    
-                    // Animer l'icône du panier
-                    animateCartIcon();
-                    
-                    // Afficher un message de succès
-                    showSuccessMessage('Produit ajouté au panier !');
-                    
-                    // Optionnel: redirection vers le panier
-                    // setTimeout(() => {
-                    //     window.location.href = '{{ route("cart.index") }}';
-                    // }, 1500);
-                } else {
-                    // Afficher un message d'erreur
-                    showErrorMessage(data.message || 'Erreur lors de l\'ajout au panier');
-                }
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
-                showErrorMessage('Une erreur est survenue');
-            })
-            .finally(() => {
-                // Réactiver le bouton
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
-            });
-        });
-        
-        // Gestion du changement de variant pour mettre à jour le stock max
-        const variantSelect = document.getElementById('variant_id');
-        const qtyInput = document.getElementById('product-qty');
-        
-        if (variantSelect && qtyInput) {
-            variantSelect.addEventListener('change', function() {
-                const selectedOption = this.options[this.selectedIndex];
-                if (selectedOption.value) {
-                    const stock = parseInt(selectedOption.dataset.stock);
-                    qtyInput.max = stock;
-                    
-                    // Réinitialiser la quantité si elle dépasse le stock
-                    if (parseInt(qtyInput.value) > stock) {
-                        qtyInput.value = stock;
+
+            // Vider les conteneurs
+            colorOptionsDiv.innerHTML = '';
+            sizeOptionsDiv.innerHTML = '';
+
+            // Organiser les variants par couleur
+            const colorsMap = new Map();
+
+            variants.forEach(variant => {
+                if (variant.couleur) {
+                    const colorId = variant.couleur.id;
+                    if (!colorsMap.has(colorId)) {
+                        colorsMap.set(colorId, {
+                            color: variant.couleur,
+                            sizes: []
+                        });
+                    }
+
+                    if (variant.taille && variant.quantite_variant > 0) {
+                        colorsMap.get(colorId).sizes.push({
+                            taille: variant.taille,
+                            variant: variant
+                        });
                     }
                 }
             });
-        }
-    }
-    
-    // ------------------------------------------------------------
-    // 4. FONCTIONS UTILITAIRES
-    // ------------------------------------------------------------
-    
-    function showSuccessMessage(message) {
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                icon: 'success',
-                title: 'Succès',
-                text: message,
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                showClass: {
-                    popup: 'animate__animated animate__fadeInDown'
-                },
-                hideClass: {
-                    popup: 'animate__animated animate__fadeOutUp'
-                }
-            });
-        } else if (typeof toastr !== 'undefined') {
-            toastr.success(message);
-        } else {
-            alert(message);
-        }
-    }
-    
-    function showErrorMessage(message) {
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                icon: 'error',
-                title: 'Erreur',
-                text: message,
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000
-            });
-        } else if (typeof toastr !== 'undefined') {
-            toastr.error(message);
-        } else {
-            alert(message);
-        }
-    }
-    
-    // ------------------------------------------------------------
-    // 5. INITIALISATION DES MODALS D'AJOUT AU PANIER
-    // ------------------------------------------------------------
-    
-    // Attendre que le DOM soit complètement chargé
-    setTimeout(() => {
-        if (document.querySelector('.add-to-cart-modal-btn')) {
-            console.log('Initialisation des modals d\'ajout au panier...');
-            initializeAddToCartModals();
-        }
-    }, 100);
-});
 
-// ------------------------------------------------------------
-// FONCTION PRINCIPALE POUR LES MODALS D'AJOUT AU PANIER
-// ------------------------------------------------------------
-function initializeAddToCartModals() {
-    console.log('Recherche des modals sur la page...');
-    
-    // Liste de tous les modals possibles avec leurs sélecteurs
-    const modalConfigs = [
-        { 
-            id: 'addToCartModalHome',
-            modalSelector: '#addToCartModalHome',
-            prefix: 'home_'
-        },
-        { 
-            id: 'addToCartModal',
-            modalSelector: '#addToCartModal',
-            prefix: ''
-        }
-    ];
-    
-    // Trouver quel modal existe sur cette page
-    let activeModal = null;
-    let modalPrefix = '';
-    
-    for (const config of modalConfigs) {
-        const modalElement = document.querySelector(config.modalSelector);
-        if (modalElement) {
-            activeModal = modalElement;
-            modalPrefix = config.prefix;
-            console.log(`Modal trouvé: ${config.id} avec préfixe: ${modalPrefix}`);
-            break;
-        }
-    }
-    
-    if (!activeModal) {
-        console.log('Aucun modal d\'ajout au panier trouvé sur cette page');
-        return;
-    }
-    
-    // Construire les sélecteurs complets
-    const selectors = {
-        modal: activeModal,
-        form: `#addToCartModalForm${modalPrefix ? 'Home' : ''}`,
-        productId: `#modal_product_id${modalPrefix}`,
-        productName: `#modal_product_name${modalPrefix}`,
-        productImage: `#modal_product_image${modalPrefix}`,
-        productPrice: `#modal_product_price${modalPrefix}`,
-        productOldPrice: `#modal_product_old_price${modalPrefix}`,
-        viewDetailsLink: `#view_details_link${modalPrefix}`,
-        selectedVariantId: `#selected_variant_id${modalPrefix}`,
-        modalProductQty: `#modal_product_qty${modalPrefix}`,
-        colorError: `#color_error${modalPrefix}`,
-        sizeError: `#size_error${modalPrefix}`,
-        variantError: `#variant_error${modalPrefix}`,
-        colorOptions: `#color_options${modalPrefix}`,
-        sizeOptions: `#size_options${modalPrefix}`,
-        priceSection: `#variant_price_section${modalPrefix}`,
-        stockSection: `#variant_stock_section${modalPrefix}`,
-        selectedVariantPrice: `#selected_variant_price${modalPrefix}`,
-        selectedVariantStock: `#selected_variant_stock${modalPrefix}`,
-        variantsSection: `#variants_section${modalPrefix}`,
-        noVariantsSection: `#no_variants_section${modalPrefix}`,
-        productStock: `#product_stock${modalPrefix}`,
-        qtyDown: `#modal_qty_down${modalPrefix}`,
-        qtyUp: `#modal_qty_up${modalPrefix}`
-    };
-    
-    // ------------------------------------------------------------
-    // 1. GESTION DES BOUTONS D'OUVERTURE DE MODAL
-    // ------------------------------------------------------------
-    document.addEventListener('click', function(e) {
-        const addToCartBtn = e.target.closest('.add-to-cart-modal-btn');
-        if (addToCartBtn) {
-            e.preventDefault();
-            openAddToCartModal(addToCartBtn, selectors, activeModal);
-        }
-    });
-    
-    // ------------------------------------------------------------
-    // 2. GESTION DES BOUTONS DE QUANTITÉ
-    // ------------------------------------------------------------
-    const qtyDownBtn = document.querySelector(selectors.qtyDown);
-    const qtyUpBtn = document.querySelector(selectors.qtyUp);
-    const qtyInput = document.querySelector(selectors.modalProductQty);
-    
-    if (qtyDownBtn && qtyInput) {
-        qtyDownBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const currentValue = parseInt(qtyInput.value) || 1;
-            if (currentValue > 1) {
-                qtyInput.value = currentValue - 1;
-            }
-        });
-    }
-    
-    if (qtyUpBtn && qtyInput) {
-        qtyUpBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const currentValue = parseInt(qtyInput.value) || 1;
-            const maxValue = parseInt(qtyInput.max) || 999;
-            if (currentValue < maxValue) {
-                qtyInput.value = currentValue + 1;
-            }
-        });
-    }
-    
-    // ------------------------------------------------------------
-    // 3. GESTION DE LA SOUMISSION DU FORMULAIRE
-    // ------------------------------------------------------------
-    const form = document.querySelector(selectors.form);
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            submitModalForm(this, selectors, activeModal);
-        });
-    }
-}
-
-// ------------------------------------------------------------
-// FONCTIONS AUXILIAIRES POUR LES MODALS
-// ------------------------------------------------------------
-
-function openAddToCartModal(btn, selectors, modalElement) {
-    // Récupérer les données du produit
-    const productData = {
-        id: btn.dataset.productId,
-        name: btn.dataset.productName,
-        image: btn.dataset.productImage,
-        price: btn.dataset.productPrice,
-        oldPrice: btn.dataset.productOldPrice
-    };
-    
-    console.log('Ouverture du modal pour:', productData.name);
-    
-    // Mettre à jour les informations du produit
-    updateProductInfo(productData, selectors);
-    
-    // Réinitialiser le modal
-    resetModal(selectors);
-    
-    // Charger les variants du produit
-    loadProductVariants(productData.id, selectors);
-    
-    // Afficher le modal
-    if (typeof bootstrap !== 'undefined') {
-        const modalInstance = new bootstrap.Modal(modalElement);
-        modalInstance.show();
-    } else {
-        // Fallback si Bootstrap n'est pas chargé
-        modalElement.style.display = 'block';
-        modalElement.classList.add('show');
-    }
-}
-
-function updateProductInfo(productData, selectors) {
-    // Fonction utilitaire pour mettre à jour un élément
-    function updateElement(selector, property, value) {
-        const element = document.querySelector(selector);
-        if (element) {
-            if (property === 'textContent') {
-                element.textContent = value;
-            } else if (property === 'value') {
-                element.value = value;
-            } else if (property === 'src') {
-                element.src = value;
-            } else if (property === 'href') {
-                element.href = value;
-            }
-        }
-    }
-    
-    // Mettre à jour tous les éléments
-    updateElement(selectors.productId, 'value', productData.id);
-    updateElement(selectors.productName, 'textContent', productData.name);
-    updateElement(selectors.productImage, 'src', productData.image);
-    updateElement(selectors.productPrice, 'textContent', productData.price);
-    updateElement(selectors.viewDetailsLink, 'href', `/shop/${productData.id}`);
-    
-    // Gestion de l'ancien prix
-    const oldPriceElement = document.querySelector(selectors.productOldPrice);
-    if (oldPriceElement) {
-        if (productData.oldPrice && productData.oldPrice.trim() !== '') {
-            oldPriceElement.textContent = productData.oldPrice;
-            oldPriceElement.style.display = 'inline';
-        } else {
-            oldPriceElement.style.display = 'none';
-        }
-    }
-}
-
-function resetModal(selectors) {
-    console.log('Réinitialisation du modal');
-    
-    // Fonction utilitaire pour manipuler les éléments
-    function handleElement(selector, action, value = null) {
-        const element = document.querySelector(selector);
-        if (!element) return;
-        
-        switch(action) {
-            case 'hide':
-                element.style.display = 'none';
-                break;
-            case 'show':
-                element.style.display = 'block';
-                break;
-            case 'clear':
-                element.innerHTML = '';
-                break;
-            case 'setValue':
-                element.value = value;
-                break;
-            case 'setMax':
-                element.max = value;
-                break;
-        }
-    }
-    
-    // Réinitialiser les champs
-    handleElement(selectors.selectedVariantId, 'setValue', '');
-    handleElement(selectors.modalProductQty, 'setValue', 1);
-    handleElement(selectors.modalProductQty, 'setMax', 999);
-    
-    // Masquer les messages d'erreur
-    handleElement(selectors.colorError, 'hide');
-    handleElement(selectors.sizeError, 'hide');
-    handleElement(selectors.variantError, 'hide');
-    
-    // Masquer les sections d'info variant
-    handleElement(selectors.priceSection, 'hide');
-    handleElement(selectors.stockSection, 'hide');
-    
-    // Vider les options
-    handleElement(selectors.colorOptions, 'clear');
-    handleElement(selectors.sizeOptions, 'clear');
-    
-    // Masquer les sections de variant
-    handleElement(selectors.variantsSection, 'hide');
-    handleElement(selectors.noVariantsSection, 'hide');
-}
-
-function loadProductVariants(productId, selectors) {
-    console.log(`Chargement des variants pour ${productId}`);
-    
-    fetch(`/api/products/${productId}/variants`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erreur HTTP: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Données reçues:', data);
-            
-            if (data.success) {
-                if (data.variants && data.variants.length > 0) {
-                    // Produit avec variants
-                    document.querySelector(selectors.variantsSection).style.display = 'block';
-                    generateVariantOptions(data.variants, selectors);
-                } else {
-                    // Produit sans variant
-                    document.querySelector(selectors.noVariantsSection).style.display = 'block';
-                    
-                    const stockElement = document.querySelector(selectors.productStock);
-                    const qtyInput = document.querySelector(selectors.modalProductQty);
-                    
-                    if (stockElement) {
-                        stockElement.textContent = `${data.stock} articles`;
-                    }
-                    
-                    if (qtyInput && data.stock) {
-                        qtyInput.max = data.stock;
-                    }
-                }
-            } else {
-                showModalError(selectors.variantError, data.message || 'Erreur lors du chargement des options');
-            }
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-            showModalError(selectors.variantError, 'Impossible de charger les options. Veuillez réessayer.');
-        });
-}
-
-function generateVariantOptions(variants, selectors) {
-    const colorOptionsDiv = document.querySelector(selectors.colorOptions);
-    const sizeOptionsDiv = document.querySelector(selectors.sizeOptions);
-    
-    if (!colorOptionsDiv || !sizeOptionsDiv) {
-        console.error('Conteneurs d\'options non trouvés');
-        return;
-    }
-    
-    // Vider les conteneurs
-    colorOptionsDiv.innerHTML = '';
-    sizeOptionsDiv.innerHTML = '';
-    
-    // Organiser les variants par couleur
-    const colorsMap = new Map();
-    
-    variants.forEach(variant => {
-        if (variant.couleur) {
-            const colorId = variant.couleur.id;
-            if (!colorsMap.has(colorId)) {
-                colorsMap.set(colorId, {
-                    color: variant.couleur,
-                    sizes: []
-                });
-            }
-            
-            if (variant.taille && variant.quantite_variant > 0) {
-                colorsMap.get(colorId).sizes.push({
-                    taille: variant.taille,
-                    variant: variant
-                });
-            }
-        }
-    });
-    
-    // Créer les boutons de couleur
-    colorsMap.forEach((colorData, colorId) => {
-        const colorBtn = document.createElement('button');
-        colorBtn.type = 'button';
-        colorBtn.className = 'color-option';
-        colorBtn.style.cssText = `
+            // Créer les boutons de couleur
+            colorsMap.forEach((colorData, colorId) => {
+                const colorBtn = document.createElement('button');
+                colorBtn.type = 'button';
+                colorBtn.className = 'color-option';
+                colorBtn.style.cssText = `
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -1942,218 +2009,218 @@ function generateVariantOptions(variants, selectors) {
             cursor: pointer;
             transition: all 0.3s ease;
         `;
-        colorBtn.title = colorData.color.name;
-        colorBtn.dataset.colorId = colorId;
-        
-        colorBtn.addEventListener('click', function() {
-            // Désélectionner toutes les couleurs
-            document.querySelectorAll(`${selectors.colorOptions} .color-option`).forEach(opt => {
-                opt.classList.remove('selected');
-                opt.style.borderColor = '#ddd';
-            });
-            
-            // Sélectionner cette couleur
-            this.classList.add('selected');
-            this.style.borderColor = '#3bb77e';
-            
-            // Afficher les tailles pour cette couleur
-            displaySizesForColor(colorData.sizes, selectors);
-            
-            // Masquer l'erreur de couleur
-            document.querySelector(selectors.colorError).style.display = 'none';
-        });
-        
-        colorOptionsDiv.appendChild(colorBtn);
-    });
-    
-    // Sélectionner la première couleur par défaut si disponible
-    if (colorsMap.size > 0) {
-        setTimeout(() => {
-            const firstColorBtn = colorOptionsDiv.querySelector('.color-option');
-            if (firstColorBtn) {
-                firstColorBtn.click();
-            }
-        }, 100);
-    }
-}
+                colorBtn.title = colorData.color.name;
+                colorBtn.dataset.colorId = colorId;
 
-function displaySizesForColor(sizes, selectors) {
-    const sizeOptionsDiv = document.querySelector(selectors.sizeOptions);
-    if (!sizeOptionsDiv) return;
-    
-    sizeOptionsDiv.innerHTML = '';
-    
-    if (sizes.length === 0) {
-        sizeOptionsDiv.innerHTML = '<p class="text-muted small">Aucune taille disponible</p>';
-        return;
-    }
-    
-    sizes.forEach(sizeData => {
-        const sizeBtn = document.createElement('button');
-        sizeBtn.type = 'button';
-        sizeBtn.className = 'size-option btn btn-outline-secondary';
-        sizeBtn.textContent = sizeData.taille.name;
-        sizeBtn.dataset.variantId = sizeData.variant.id;
-        sizeBtn.dataset.stock = sizeData.variant.quantite_variant;
-        sizeBtn.dataset.price = sizeData.variant.prix_promotionnel_variant || sizeData.variant.prix_ttc_variant;
-        
-        sizeBtn.addEventListener('click', function() {
-            // Désélectionner toutes les tailles
-            document.querySelectorAll(`${selectors.sizeOptions} .size-option`).forEach(opt => {
-                opt.classList.remove('btn-primary');
-                opt.classList.add('btn-outline-secondary');
-            });
-            
-            // Sélectionner cette taille
-            this.classList.remove('btn-outline-secondary');
-            this.classList.add('btn-primary');
-            
-            // Mettre à jour le variant sélectionné
-            document.querySelector(selectors.selectedVariantId).value = this.dataset.variantId;
-            
-            // Mettre à jour le stock et la quantité max
-            const stock = parseInt(this.dataset.stock);
-            const qtyInput = document.querySelector(selectors.modalProductQty);
-            if (qtyInput) {
-                qtyInput.max = stock;
-            }
-            
-            // Mettre à jour le prix affiché
-            const price = parseFloat(this.dataset.price);
-            document.querySelector(selectors.productPrice).textContent = price.toFixed(2).replace('.', ',') + ' €';
-            
-            // Afficher les infos du variant
-            document.querySelector(selectors.priceSection).style.display = 'block';
-            document.querySelector(selectors.stockSection).style.display = 'block';
-            document.querySelector(selectors.selectedVariantPrice).textContent = price.toFixed(2).replace('.', ',') + ' €';
-            document.querySelector(selectors.selectedVariantStock).textContent = stock + ' disponible(s)';
-            
-            // Masquer l'erreur de taille
-            document.querySelector(selectors.sizeError).style.display = 'none';
-            
-            // Réinitialiser la quantité à 1
-            if (qtyInput) {
-                qtyInput.value = 1;
-            }
-        });
-        
-        sizeOptionsDiv.appendChild(sizeBtn);
-    });
-}
+                colorBtn.addEventListener('click', function () {
+                    // Désélectionner toutes les couleurs
+                    document.querySelectorAll(`${selectors.colorOptions} .color-option`).forEach(opt => {
+                        opt.classList.remove('selected');
+                        opt.style.borderColor = '#ddd';
+                    });
 
-function submitModalForm(form, selectors, modalElement) {
-    // Validation
-    const variantIdInput = document.querySelector(selectors.selectedVariantId);
-    const qtyInput = document.querySelector(selectors.modalProductQty);
-    const variantsSection = document.querySelector(selectors.variantsSection);
-    
-    // Vérifier si le produit a des variants
-    const hasVariants = variantsSection && variantsSection.style.display !== 'none';
-    
-    if (hasVariants && (!variantIdInput || !variantIdInput.value)) {
-        // Afficher l'erreur dans le bon champ
-        if (variantIdInput && !variantIdInput.value) {
-            const colorError = document.querySelector(selectors.colorError);
-            const sizeError = document.querySelector(selectors.sizeError);
-            
-            // Vérifier ce qui n'est pas sélectionné
-            const colorSelected = document.querySelector(`${selectors.colorOptions} .color-option.selected`);
-            const sizeSelected = document.querySelector(`${selectors.sizeOptions} .size-option.btn-primary`);
-            
-            if (!colorSelected && colorError) {
-                colorError.style.display = 'block';
-            }
-            
-            if (!sizeSelected && sizeError) {
-                sizeError.style.display = 'block';
-            }
-            
-            if (colorSelected && sizeSelected) {
-                // Si les deux sont sélectionnés mais variantId n'est pas défini
-                showModalError(selectors.variantError, 'Veuillez sélectionner une option valide');
-            }
-        }
-        return;
-    }
-    
-    // Désactiver le bouton de soumission
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fi-rs-loading mr-5"></i>Ajout...';
-    
-    // Soumettre le formulaire
-    const formData = new FormData(form);
-    
-    fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Mettre à jour le compteur du panier dans tout le site
-            document.querySelectorAll('.cart-count').forEach(el => {
-                el.textContent = data.cart_count;
-            });
-            
-            // Animer l'icône du panier
-            const cartIcons = document.querySelectorAll('.mini-cart-icon');
-            cartIcons.forEach(icon => {
-                icon.classList.add('animate');
-                setTimeout(() => icon.classList.remove('animate'), 500);
-            });
-            
-            // Fermer le modal
-            if (typeof bootstrap !== 'undefined') {
-                const modal = bootstrap.Modal.getInstance(modalElement);
-                if (modal) modal.hide();
-            } else {
-                modalElement.style.display = 'none';
-                modalElement.classList.remove('show');
-            }
-            
-            // Afficher un message de succès
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Succès',
-                    text: 'Produit ajouté au panier !',
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000
+                    // Sélectionner cette couleur
+                    this.classList.add('selected');
+                    this.style.borderColor = '#3bb77e';
+
+                    // Afficher les tailles pour cette couleur
+                    displaySizesForColor(colorData.sizes, selectors);
+
+                    // Masquer l'erreur de couleur
+                    document.querySelector(selectors.colorError).style.display = 'none';
                 });
-            } else {
-                alert('Produit ajouté au panier !');
-            }
-        } else {
-            showModalError(selectors.variantError, data.message || 'Erreur lors de l\'ajout au panier');
-        }
-    })
-    .catch(error => {
-        console.error('Erreur:', error);
-        showModalError(selectors.variantError, 'Une erreur est survenue');
-    })
-    .finally(() => {
-        // Réactiver le bouton
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
-    });
-}
 
-function showModalError(selector, message) {
-    const element = document.querySelector(selector);
-    if (element) {
-        element.textContent = message;
-        element.style.display = 'block';
-    }
-}
-</script>
+                colorOptionsDiv.appendChild(colorBtn);
+            });
+
+            // Sélectionner la première couleur par défaut si disponible
+            if (colorsMap.size > 0) {
+                setTimeout(() => {
+                    const firstColorBtn = colorOptionsDiv.querySelector('.color-option');
+                    if (firstColorBtn) {
+                        firstColorBtn.click();
+                    }
+                }, 100);
+            }
+        }
+
+        function displaySizesForColor(sizes, selectors) {
+            const sizeOptionsDiv = document.querySelector(selectors.sizeOptions);
+            if (!sizeOptionsDiv) return;
+
+            sizeOptionsDiv.innerHTML = '';
+
+            if (sizes.length === 0) {
+                sizeOptionsDiv.innerHTML = '<p class="text-muted small">Aucune taille disponible</p>';
+                return;
+            }
+
+            sizes.forEach(sizeData => {
+                const sizeBtn = document.createElement('button');
+                sizeBtn.type = 'button';
+                sizeBtn.className = 'size-option btn btn-outline-secondary';
+                sizeBtn.textContent = sizeData.taille.name;
+                sizeBtn.dataset.variantId = sizeData.variant.id;
+                sizeBtn.dataset.stock = sizeData.variant.quantite_variant;
+                sizeBtn.dataset.price = sizeData.variant.prix_promotionnel_variant || sizeData.variant.prix_ttc_variant;
+
+                sizeBtn.addEventListener('click', function () {
+                    // Désélectionner toutes les tailles
+                    document.querySelectorAll(`${selectors.sizeOptions} .size-option`).forEach(opt => {
+                        opt.classList.remove('btn-primary');
+                        opt.classList.add('btn-outline-secondary');
+                    });
+
+                    // Sélectionner cette taille
+                    this.classList.remove('btn-outline-secondary');
+                    this.classList.add('btn-primary');
+
+                    // Mettre à jour le variant sélectionné
+                    document.querySelector(selectors.selectedVariantId).value = this.dataset.variantId;
+
+                    // Mettre à jour le stock et la quantité max
+                    const stock = parseInt(this.dataset.stock);
+                    const qtyInput = document.querySelector(selectors.modalProductQty);
+                    if (qtyInput) {
+                        qtyInput.max = stock;
+                    }
+
+                    // Mettre à jour le prix affiché
+                    const price = parseFloat(this.dataset.price);
+                    document.querySelector(selectors.productPrice).textContent = price.toFixed(2).replace('.', ',') + ' €';
+
+                    // Afficher les infos du variant
+                    document.querySelector(selectors.priceSection).style.display = 'block';
+                    document.querySelector(selectors.stockSection).style.display = 'block';
+                    document.querySelector(selectors.selectedVariantPrice).textContent = price.toFixed(2).replace('.', ',') + ' €';
+                    document.querySelector(selectors.selectedVariantStock).textContent = stock + ' disponible(s)';
+
+                    // Masquer l'erreur de taille
+                    document.querySelector(selectors.sizeError).style.display = 'none';
+
+                    // Réinitialiser la quantité à 1
+                    if (qtyInput) {
+                        qtyInput.value = 1;
+                    }
+                });
+
+                sizeOptionsDiv.appendChild(sizeBtn);
+            });
+        }
+
+        function submitModalForm(form, selectors, modalElement) {
+            // Validation
+            const variantIdInput = document.querySelector(selectors.selectedVariantId);
+            const qtyInput = document.querySelector(selectors.modalProductQty);
+            const variantsSection = document.querySelector(selectors.variantsSection);
+
+            // Vérifier si le produit a des variants
+            const hasVariants = variantsSection && variantsSection.style.display !== 'none';
+
+            if (hasVariants && (!variantIdInput || !variantIdInput.value)) {
+                // Afficher l'erreur dans le bon champ
+                if (variantIdInput && !variantIdInput.value) {
+                    const colorError = document.querySelector(selectors.colorError);
+                    const sizeError = document.querySelector(selectors.sizeError);
+
+                    // Vérifier ce qui n'est pas sélectionné
+                    const colorSelected = document.querySelector(`${selectors.colorOptions} .color-option.selected`);
+                    const sizeSelected = document.querySelector(`${selectors.sizeOptions} .size-option.btn-primary`);
+
+                    if (!colorSelected && colorError) {
+                        colorError.style.display = 'block';
+                    }
+
+                    if (!sizeSelected && sizeError) {
+                        sizeError.style.display = 'block';
+                    }
+
+                    if (colorSelected && sizeSelected) {
+                        // Si les deux sont sélectionnés mais variantId n'est pas défini
+                        showModalError(selectors.variantError, 'Veuillez sélectionner une option valide');
+                    }
+                }
+                return;
+            }
+
+            // Désactiver le bouton de soumission
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fi-rs-loading mr-5"></i>Ajout...';
+
+            // Soumettre le formulaire
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Mettre à jour le compteur du panier dans tout le site
+                        document.querySelectorAll('.cart-count').forEach(el => {
+                            el.textContent = data.cart_count;
+                        });
+
+                        // Animer l'icône du panier
+                        const cartIcons = document.querySelectorAll('.mini-cart-icon');
+                        cartIcons.forEach(icon => {
+                            icon.classList.add('animate');
+                            setTimeout(() => icon.classList.remove('animate'), 500);
+                        });
+
+                        // Fermer le modal
+                        if (typeof bootstrap !== 'undefined') {
+                            const modal = bootstrap.Modal.getInstance(modalElement);
+                            if (modal) modal.hide();
+                        } else {
+                            modalElement.style.display = 'none';
+                            modalElement.classList.remove('show');
+                        }
+
+                        // Afficher un message de succès
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Succès',
+                                text: 'Produit ajouté au panier !',
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        } else {
+                            alert('Produit ajouté au panier !');
+                        }
+                    } else {
+                        showModalError(selectors.variantError, data.message || 'Erreur lors de l\'ajout au panier');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    showModalError(selectors.variantError, 'Une erreur est survenue');
+                })
+                .finally(() => {
+                    // Réactiver le bouton
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                });
+        }
+
+        function showModalError(selector, message) {
+            const element = document.querySelector(selector);
+            if (element) {
+                element.textContent = message;
+                element.style.display = 'block';
+            }
+        }
+    </script>
     <script src=" {{ asset('front-end/js/vendor/modernizr-3.6.0.min.js') }}"></script>
     <script src=" {{ asset('front-end/js/vendor/jquery-3.7.1.min.js') }}"></script>
     <script src=" {{ asset('front-end/js/vendor/jquery-migrate-3.3.0.min.js') }}"></script>

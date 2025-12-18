@@ -28,6 +28,8 @@ class Produit extends Model
         'avec_variant',
         'reference',
         'image',
+        'long_description',
+        'additional_info',
     ];
 
     /**

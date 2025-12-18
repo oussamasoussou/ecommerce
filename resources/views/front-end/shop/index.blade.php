@@ -39,7 +39,7 @@
                         </div>
                     </div>
 
-                    <div class="row product-grid">
+                    <div class="row product-grid g-3">
                         @foreach($produits as $produit)
                             <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
                                 <div class="product-cart-wrap mb-30">
