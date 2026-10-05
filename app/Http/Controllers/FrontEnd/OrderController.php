@@ -43,13 +43,12 @@ class OrderController extends Controller
 
             $order = Order::create([
                 'user_id' => $userId,
-                'status' => 'paid',
+                'status' => 'pending', // paiement à la livraison : confirmé à la réception
                 'total' => 0, // on calcule après
                 'tva' => $tauxTVA,
                 'adresse_livraison' => $billing['adresse'] ?? null,
                 'nom_client' => $billing['nom'] ?? null,
                 'telephone' => $billing['telephone'] ?? null,
-                'stripe_payment_id' => $billing['stripe_payment_id'] ?? null,
             ]);
 
             $total = 0;

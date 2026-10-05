@@ -176,7 +176,7 @@
                                         @if($category->image)
                                             <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" />
                                         @else
-                                            <img src="{{ asset('assets/imgs/shop/cat-' . (($loop->index % 15) + 1) . '.png') }}" alt="{{ $category->name }}" />
+                                            <img src="{{ asset('front-end/imgs/shop/cat-' . (($loop->index % 15) + 1) . '.png') }}" alt="{{ $category->name }}" />
                                         @endif
                                     </a>
                                 </figure>
@@ -221,14 +221,12 @@
                                         @if($produit->image)
                                             <img class="default-img" src="{{ asset('storage/' . $produit->image) }}" alt="{{ $produit->nom }}" />
                                         @else
-                                            <img class="default-img" src="{{ asset('assets/imgs/shop/product-' . (($loop->index % 10) + 1) . '-1.jpg') }}" alt="{{ $produit->nom }}" />
+                                            <img class="default-img" src="{{ asset('front-end/imgs/shop/product-' . (($loop->index % 10) + 1) . '-1.jpg') }}" alt="{{ $produit->nom }}" />
                                         @endif
                                         <!-- Image hover -->
                                         @if($produit->produitImages && $produit->produitImages->count() > 0)
-                                            <img class="hover-img" src="{{ asset('storage/' . $produit->produitImages->first()->image_path) }}" alt="{{ $produit->nom }}" />
-                                        @else
-                                            <img class="hover-img" src="{{ asset('assets/imgs/shop/product-' . (($loop->index % 10) + 1) . '-2.jpg') }}" alt="{{ $produit->nom }}" />
-                                        @endif
+    <img class="hover-img" src="{{ asset('storage/' . $produit->produitImages->first()->image_path) }}" alt="{{ $produit->nom }}" />
+@endif
                                     </a>
                                 </div>
                                 <div class="product-action-1">
@@ -284,10 +282,10 @@
                                 <div class="product-card-bottom">
                                     <div class="product-price">
                                         @if($produit->prix_promotionnel)
-                                            <span>{{ number_format($produit->prix_promotionnel, 2) }} €</span>
-                                            <span class="old-price">{{ number_format($produit->prix_ttc, 2) }} €</span>
+                                            <span>{{ number_format($produit->prix_promotionnel, 2) }} DT</span>
+                                            <span class="old-price">{{ number_format($produit->prix_ttc, 2) }} DT</span>
                                         @else
-                                            <span>{{ number_format($produit->prix_ttc, 2) }} €</span>
+                                            <span>{{ number_format($produit->prix_ttc, 2) }} DT</span>
                                         @endif
                                     </div>
                                     <!-- Dans product-card -->
@@ -336,7 +334,7 @@
                                         @if($produit->image)
                                             <img class="default-img" src="{{ asset('storage/' . $produit->image) }}" alt="{{ $produit->nom }}" />
                                         @else
-                                            <img class="default-img" src="{{ asset('assets/imgs/shop/product-' . (($loop->index % 10) + 1) . '-1.jpg') }}" alt="{{ $produit->nom }}" />
+                                            <img class="default-img" src="{{ asset('front-end/imgs/shop/product-' . (($loop->index % 10) + 1) . '-1.jpg') }}" alt="{{ $produit->nom }}" />
                                         @endif
                                     </a>
                                 </div>
@@ -374,10 +372,10 @@
                                 <div class="product-card-bottom">
                                     <div class="product-price">
                                         @if($produit->prix_promotionnel)
-                                            <span>{{ number_format($produit->prix_promotionnel, 2) }} €</span>
-                                            <span class="old-price">{{ number_format($produit->prix_ttc, 2) }} €</span>
+                                            <span>{{ number_format($produit->prix_promotionnel, 2) }} DT</span>
+                                            <span class="old-price">{{ number_format($produit->prix_ttc, 2) }} DT</span>
                                         @else
-                                            <span>{{ number_format($produit->prix_ttc, 2) }} €</span>
+                                            <span>{{ number_format($produit->prix_ttc, 2) }} DT</span>
                                         @endif
                                     </div>
                                     <!-- Dans la boucle foreach des produits -->
@@ -388,7 +386,7 @@
                                                     data-product-id="{{ $produit->id }}"
                                                     data-product-name="{{ $produit->nom }}"
                                                     data-product-image="{{ asset('storage/' . $produit->image) }}"
-                                                    data-product-price="{{ number_format($produit->prix_promotionnel ?? $produit->prix_ttc, 2, ',', ' ') }} €"
+                                                    data-product-price="{{ number_format($produit->prix_promotionnel ?? $produit->prix_ttc, 2, ',', ' ') }} DT"
                                                     data-product-old-price="{{ $produit->prix_promotionnel ? number_format($produit->prix_ttc, 2, ',', ' ') : '' }}"
                                                     style="background: none; border: none; color: inherit; cursor: pointer;">
                                                 <i class="fi-rs-shopping-cart mr-5"></i>Ajouter

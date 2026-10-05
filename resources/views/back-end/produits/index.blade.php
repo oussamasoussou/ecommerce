@@ -22,7 +22,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($produits as $produit)
+                        @forelse ($produits as $produit)
                         <tr style="border-bottom: 1px solid #d4d4d4;">
                             <td>{{ $produit->nom }}</td>
                             <td>{{ $produit->sousCategorie->name ?? 'Non définie' }}</td>

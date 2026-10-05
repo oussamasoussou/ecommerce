@@ -11,7 +11,7 @@ class Order extends Model
 
     protected $fillable = [
         'user_id', 'status', 'total', 'tva',
-        'nom_client', 'adresse_livraison', 'telephone', 'stripe_payment_id'
+        'nom_client', 'adresse_livraison', 'telephone'
     ];
 
     public function user() {

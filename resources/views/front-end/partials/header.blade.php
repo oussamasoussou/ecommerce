@@ -34,16 +34,16 @@
         <div class="container">
             <div class="header-wrap">
                 <div class="logo logo-width-1">
-                    <a href="index.html"><img src="{{ asset('front-end/imgs/theme/logo.svg') }}" alt="logo" /></a>
+                    <a href="index.html"><img src="{{ asset('front-end/imgs/theme/logo.png') }}" alt="logo" /></a>
                 </div>
                 <div class="header-right">
                     <div class="search-style-2">
                         <form action="{{ route('frontend.search') }}" method="GET">
                             <select class="select-active" name="category">
                                 <option value="">Toutes catégories</option>
-                                @foreach($categoriesMenu as $category)
+                                @foreach ($categoriesMenu as $category)
                                     <optgroup label="{{ $category->name }}">
-                                        @foreach($category->sousCategories as $sousCategorie)
+                                        @foreach ($category->sousCategories as $sousCategorie)
                                             <option value="{{ $sousCategorie->id }}" {{ request('category') == $sousCategorie->id ? 'selected' : '' }}>
                                                 {{ $sousCategorie->name }}
                                             </option>
@@ -88,7 +88,7 @@
                                             @endphp
 
                                             @if($cartItems->count() > 0)
-                                                @foreach($cartItems as $item)
+                                                @foreach ($cartItems as $item)
                                                     <li>
                                                         <div class="shopping-cart-img">
                                                             <a href="{{ route('shop.show', $item->produit_id) }}">
@@ -104,7 +104,7 @@
                                                                 </a>
                                                             </h4>
                                                             <h4><span>{{ $item->quantite }} ×
-                                                                </span>{{ number_format($item->prix_unitaire, 2, ',', ' ') }} €
+                                                                </span>{{ number_format($item->prix_unitaire, 2, ',', ' ') }} DT
                                                             </h4>
                                                         </div>
                                                         <div class="shopping-cart-delete">
@@ -119,7 +119,7 @@
                                                     <div class="shopping-cart-footer">
                                                         <div class="shopping-cart-total">
                                                             <h4>Total <span>{{ number_format($miniCartTotal, 2, ',', ' ') }}
-                                                                    €</span></h4>
+                                                                    DT</span></h4>
                                                         </div>
                                                         <div class="shopping-cart-button">
                                                             <a href="{{ route('cart.index') }}" class="outline">Voir le
@@ -194,14 +194,14 @@
         <div class="container">
             <div class="header-wrap header-space-between position-relative">
                 <div class="logo logo-width-1 d-block d-lg-none">
-                    <a href="index.html"><img src="{{ asset('front-end/imgs/theme/logo.svg') }}" alt="logo" /></a>
+                    <a href="index.html"><img src="{{ asset('front-end/imgs/theme/logo.png') }}" alt="logo" /></a>
                 </div>
                 <div class="header-nav d-none d-lg-flex">
                     <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block font-heading">
                         <nav>
                             <ul>
                                 <!-- Catégories dynamiques pour le menu desktop -->
-                                @foreach($categoriesMenu as $category)
+                                @foreach ($categoriesMenu as $category)
                                     <li class="@if($category->sousCategories->count() > 0) position-static @endif">
                                         <img src="{{ asset('storage/' . $category->logo) }}" alt="{{ $category->name }}"
                                             style="height: 22px; width: 22px; object-fit: contain; margin-right: 4px; 
@@ -220,7 +220,7 @@
                                                     <a class="menu-title"
                                                         href="{{ route('shop.index', ['categorie' => $category->sousCategories->first()->id ?? '']) }}">{{ $category->name }}</a>
                                                     <ul>
-                                                        @foreach($category->sousCategories as $sousCategorie)
+                                                        @foreach ($category->sousCategories as $sousCategorie)
                                                             <li><a
                                                                     href="{{ route('shop.index', ['categorie' => $sousCategorie->id]) }}">{{ $sousCategorie->name }}</a>
                                                             </li>
@@ -283,7 +283,7 @@
     <div class="mobile-header-wrapper-inner">
         <div class="mobile-header-top">
             <div class="mobile-header-logo">
-                <a href="index.html"><img src="{{ asset('front-end/imgs/theme/logo.svg') }}" alt="logo" /></a>
+                <a href="index.html"><img src="{{ asset('front-end/imgs/theme/logo.png') }}" alt="logo" /></a>
             </div>
             <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                 <button class="close-style search-close">
@@ -303,7 +303,7 @@
                 <nav>
                     <ul class="mobile-menu font-heading">
                         <!-- Catégories dynamiques pour le menu mobile -->
-                        @foreach($categoriesMenu as $category)
+                        @foreach ($categoriesMenu as $category)
                             <li class="menu-item-has-children">
                                 <a
                                     href="{{ route('shop.index', ['categorie' => $category->sousCategories->first()->id ?? '']) }}">
@@ -311,7 +311,7 @@
                                 </a>
                                 @if($category->sousCategories->count() > 0)
                                     <ul class="dropdown">
-                                        @foreach($category->sousCategories as $sousCategorie)
+                                        @foreach ($category->sousCategories as $sousCategorie)
                                             <li>
                                                 <a href="{{ route('shop.index', ['categorie' => $sousCategorie->id]) }}">
                                                     {{ $sousCategorie->name }}

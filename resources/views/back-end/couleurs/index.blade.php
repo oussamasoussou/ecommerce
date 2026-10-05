@@ -23,7 +23,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($couleurs as $couleur)
+                        @forelse ($couleurs as $couleur)
                         <tr style="border-bottom: 1px solid #d4d4d4;">
                             <td>{{ $couleur->name }}</td>
                             <td>{{ $couleur->code_hex }}</td>

@@ -16,7 +16,7 @@ use App\Http\Controllers\FrontEnd\AuthClientController;
 use App\Http\Controllers\FrontEnd\CartController;
 use App\Http\Controllers\FrontEnd\CheckoutController;
 use App\Http\Controllers\FrontEnd\OrderController;
-use App\Http\Controllers\Frontend\SearchController;
+use App\Http\Controllers\FrontEnd\SearchController;
 use App\Http\Controllers\FrontEnd\ShopController;
 use App\Http\Controllers\FrontEnd\WishlistController;
 use Illuminate\Support\Facades\Route;
@@ -115,17 +115,9 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-// Front / back shop
-Route::get('produits/shop', [ShopController::class, 'index'])->name('produits.shop');
-Route::get('produits/shop/{produit}', [ShopController::class, 'show'])->name('produits.shop.show');
-
-
-// Front / back shop
+// Routes boutique
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop/{produit}', [ShopController::class, 'show'])->name('shop.show');
-
-// Dans web.php
-Route::get('/produit/{id}', [ShopController::class, 'show'])->name('produit.show');
 
 // Routes du panier
 Route::prefix('cart')->group(function () {
@@ -147,8 +139,7 @@ Route::middleware('auth')->group(function () {
 
     // Checkout / orders
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout/create-payment-intent', [CheckoutController::class, 'createPaymentIntent'])->name('checkout.createPaymentIntent');
-    Route::post('/checkout/confirm', [CheckoutController::class, 'confirm'])->name('checkout.confirm');
+    Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
 
     // Account
     Route::get('/account', [AccountController::class, 'profile'])->name('account.profile');
@@ -202,6 +193,4 @@ Route::get('/api/products/{id}/variants', function ($id) {
         ], 404);
     }
 })->name('api.product.variants');
-
-Route::post('/cart/add-simple', [CartController::class, 'addSimple'])->name('cart.add.simple');
 

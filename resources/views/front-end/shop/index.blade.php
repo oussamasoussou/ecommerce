@@ -114,10 +114,10 @@
                                         </div>
                                         <div class="product-card-bottom">
                                             <div class="product-price">
-                                                <span>{{ number_format($produit->prix_ttc, 2, ',', ' ') }} €</span>
+                                                <span>{{ number_format($produit->prix_ttc, 2, ',', ' ') }} DT</span>
                                                 @if($produit->prix_promotionnel)
                                                     <span class="old-price">{{ number_format($produit->prix_ht, 2, ',', ' ') }}
-                                                        €</span>
+                                                        DT</span>
                                                 @endif
                                             </div>
                                             <!-- Dans product-card -->
@@ -129,7 +129,7 @@
                                                             data-product-id="{{ $produit->id }}"
                                                             data-product-name="{{ $produit->nom }}"
                                                             data-product-image="{{ asset('storage/' . $produit->image) }}"
-                                                            data-product-price="{{ number_format($produit->prix_promotionnel ?? $produit->prix_ttc, 2, ',', ' ') }} €"
+                                                            data-product-price="{{ number_format($produit->prix_promotionnel ?? $produit->prix_ttc, 2, ',', ' ') }} DT"
                                                             data-product-old-price="{{ $produit->prix_promotionnel ? number_format($produit->prix_ttc, 2, ',', ' ') : '' }}"
                                                             style="background: none; border: none; color: inherit; cursor: pointer;">
                                                         <i class="fi-rs-shopping-cart mr-5"></i>Ajouter

@@ -31,7 +31,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($marques as $marque)
+                        @forelse ($marques as $marque)
                         <tr style="border-bottom: 1px solid #d4d4d4;">
                             <td>{{ $marque->id }}</td>
                             <td>

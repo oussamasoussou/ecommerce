@@ -15,7 +15,7 @@
                     </div>
                     <div class="col-xl-9 text-end d-none d-xl-block">
                         <ul class="tags-list">
-                            @foreach($categoriesMenu as $cat)
+                            @foreach ($categoriesMenu as $cat)
                                 <li class="hover-up">
                                     <a href="{{ route('shop.index', ['categorie' => $cat->id]) }}">
                                         {{ $cat->name }}
@@ -55,9 +55,9 @@
                         <form action="{{ route('frontend.search') }}" method="GET">
                             <select class="select-active" name="category">
                                 <option value="">Toutes catégories</option>
-                                @foreach($categoriesMenu as $category)
+                                @foreach ($categoriesMenu as $category)
                                     <optgroup label="{{ $category->name }}">
-                                        @foreach($category->sousCategories as $sousCategorie)
+                                        @foreach ($category->sousCategories as $sousCategorie)
                                             <option value="{{ $sousCategorie->id }}" 
                                                 {{ request('category') == $sousCategorie->id ? 'selected' : '' }}>
                                                 {{ $sousCategorie->name }}
@@ -77,7 +77,7 @@
 
                 @if($produits->count() > 0)
                     <div class="row product-grid">
-                        @foreach($produits as $produit)
+                        @foreach ($produits as $produit)
                         <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
                             <div class="product-cart-wrap mb-30">
                                 <div class="product-img-action-wrap">
@@ -113,10 +113,10 @@
                                     <div class="product-card-bottom">
                                         <div class="product-price">
                                             @if($produit->prix_promotionnel)
-                                                <span>€{{ number_format($produit->prix_promotionnel, 2) }}</span>
-                                                <span class="old-price">€{{ number_format($produit->prix_ttc, 2) }}</span>
+                                                <span>DT{{ number_format($produit->prix_promotionnel, 2) }}</span>
+                                                <span class="old-price">DT{{ number_format($produit->prix_ttc, 2) }}</span>
                                             @else
-                                                <span>€{{ number_format($produit->prix_ttc, 2) }}</span>
+                                                <span>DT{{ number_format($produit->prix_ttc, 2) }}</span>
                                             @endif
                                         </div>
                                         <div class="add-cart">

@@ -21,7 +21,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($tailles as $taille)
+                        @forelse ($tailles as $taille)
                         <tr style="border-bottom: 1px solid #d4d4d4;">
                             <td>{{ $taille->name }}</td>
                             <td>{{ $taille->created_at->format('d.m.Y') }}</td>

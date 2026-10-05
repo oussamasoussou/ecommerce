@@ -1,6 +1,47 @@
 @extends('front-end.layouts.app')
 
 @section('content')
+    <style>
+        .cart-table .btn-remove {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border: 1px solid #fde2e4;
+            border-radius: 50%;
+            background-color: #fff5f5;
+            color: #dc3545;
+            font-size: 16px;
+            line-height: 1;
+            cursor: pointer;
+            transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+        }
+
+        .cart-table .btn-remove i {
+            line-height: 1;
+            display: inline-flex;
+        }
+
+        .cart-table .btn-remove:hover {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: #fff;
+            transform: scale(1.08);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, .3);
+        }
+
+        .cart-table .btn-remove:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, .35);
+        }
+
+        .cart-table .btn-remove:active {
+            transform: scale(.95);
+        }
+    </style>
+
     <main class="main">
         <div class="page-header mt-30 mb-50">
             <div class="container">
@@ -46,7 +87,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($cartItems as $item)
+                                    @foreach ($cartItems as $item)
                                         <tr class="cart-item-{{ $item->id }}">
                                             <td>
                                                 <div class="d-flex align-items-center">
@@ -80,7 +121,7 @@
                                             </td>
                                             <td class="text-center align-middle">
                                                 <span class="text-brand fw-600">
-                                                    {{ number_format($item->prix_unitaire, 2, ',', ' ') }} €
+                                                    {{ number_format($item->prix_unitaire, 2, ',', ' ') }} DT
                                                 </span>
                                             </td>
                                             <!-- Dans cart.blade.php - section du tableau -->
@@ -104,12 +145,12 @@
                                             </td>
                                             <td class="text-center align-middle">
                                                 <span class="text-brand fw-600 cart-total-{{ $item->id }}">
-                                                    {{ number_format($item->prix_total, 2, ',', ' ') }} €
+                                                    {{ number_format($item->prix_total, 2, ',', ' ') }} DT
                                                 </span>
                                             </td>
                                             <td class="text-center align-middle">
-                                                <button class="btn btn-link text-danger btn-remove" data-cart-id="{{ $item->id }}"
-                                                    title="Supprimer">
+                                                <button type="button" class="btn-remove" data-cart-id="{{ $item->id }}"
+                                                    title="Supprimer" aria-label="Supprimer l'article">
                                                     <i class="fi-rs-trash"></i>
                                                 </button>
                                             </td>
@@ -137,7 +178,7 @@
                                 <div class="d-flex justify-content-between mb-3">
                                     <span class="text-muted">Sous-total</span>
                                     <span class="fw-600" id="cart-subtotal">
-                                        {{ number_format($cartTotal, 2, ',', ' ') }} €
+                                        {{ number_format($cartTotal, 2, ',', ' ') }} DT
                                     </span>
                                 </div>
 
@@ -156,7 +197,7 @@
                                 <div class="d-flex justify-content-between mb-4">
                                     <span class="h5 mb-0">Total</span>
                                     <span class="h5 mb-0 text-brand" id="cart-grand-total">
-                                        {{ number_format($cartTotal, 2, ',', ' ') }} €
+                                        {{ number_format($cartTotal, 2, ',', ' ') }} DT
                                     </span>
                                 </div>
 
@@ -164,11 +205,11 @@
                                     <i class="fi-rs-shopping-cart mr-10"></i>Passer la commande
                                 </a>
 
-                                <div class="alert alert-info mt-3" role="alert">
+                                <!-- <div class="alert alert-info mt-3" role="alert">
                                     <i class="fi-rs-info mr-10"></i>
-                                    Livraison gratuite à partir de 50€ d'achat.
+                                    Livraison gratuite à partir de 50DT d'achat.
                                     <a href="#" class="alert-link">Voir les conditions</a>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>

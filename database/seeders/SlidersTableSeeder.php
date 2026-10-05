@@ -17,7 +17,7 @@ class SlidersTableSeeder extends Seeder
             [
                 'titre' => "Ne manquez pas nos incroyables\npromotions alimentaires",
                 'sous_titre' => "Inscrivez-vous à notre newsletter quotidienne",
-                'image' => "sliders/slider-1.jpg",
+                'image' => "sliders/slider-1.png",
                 'ordre' => 1,
                 'est_actif' => true,
                 'lien' => "/promotions",
@@ -28,7 +28,7 @@ class SlidersTableSeeder extends Seeder
             [
                 'titre' => "Légumes Frais\nGrosses remises",
                 'sous_titre' => "Économisez jusqu'à 50% sur votre première commande",
-                'image' => "sliders/slider-2.jpg",
+                'image' => "sliders/slider-2.png",
                 'ordre' => 2,
                 'est_actif' => true,
                 'lien' => "/legumes-frais",
@@ -39,7 +39,7 @@ class SlidersTableSeeder extends Seeder
             [
                 'titre' => "Produits Bio\nLivraison gratuite",
                 'sous_titre' => "Profitez de la livraison gratuite sur toutes vos commandes",
-                'image' => "sliders/slider-3.jpg",
+                'image' => "sliders/slider-3.png",
                 'ordre' => 3,
                 'est_actif' => true,
                 'lien' => "/produits-bio",
@@ -50,7 +50,7 @@ class SlidersTableSeeder extends Seeder
             [
                 'titre' => "Nouvelle Collection\nÉté 2024",
                 'sous_titre' => "Découvrez nos nouveaux produits de saison",
-                'image' => "sliders/slider-4.jpg",
+                'image' => "sliders/slider-4.png",
                 'ordre' => 4,
                 'est_actif' => false, // Désactivé pour l'exemple
                 'lien' => "/nouveautes",

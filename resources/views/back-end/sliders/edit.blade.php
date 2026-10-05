@@ -52,7 +52,7 @@
                                 <label class="form-label fw-semibold">Ordre d'affichage <span class="text-danger">*</span></label>
                                 <select name="ordre" class="form-select @error('ordre') is-invalid @enderror" required>
                                     <option value="">-- Sélectionner l'ordre --</option>
-                                    @foreach($ordres as $ordre)
+                                    @foreach ($ordres as $ordre)
                                         <option value="{{ $ordre }}" {{ old('ordre', $slider->ordre) == $ordre ? 'selected' : '' }}>
                                             Position {{ $ordre }}
                                         </option>

@@ -16,17 +16,17 @@
                     <thead class="table-light">
                         <tr>
                             <th style="width:20%;">ID</th>
-                            <th style="width:30%;">Prix (€)</th>
+                            <th style="width:30%;">Prix (DT)</th>
                             <th style="width:25%;">Date de création</th>
                             <th style="width:25%;" class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($deliveries as $delivery)
+                        @forelse ($deliveries as $delivery)
                         <tr style="border-bottom: 1px solid #d4d4d4;">
                             <td>#{{ $delivery->id }}</td>
                             <td>
-                                <strong>{{ number_format($delivery->prix, 2, ',', ' ') }} €</strong>
+                                <strong>{{ number_format($delivery->prix, 2, ',', ' ') }} DT</strong>
                             </td>
                             <td>{{ $delivery->created_at->format('d.m.Y H:i') }}</td>
                             <td class="text-end">

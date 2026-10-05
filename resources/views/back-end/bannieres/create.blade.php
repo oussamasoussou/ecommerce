@@ -40,7 +40,7 @@
                                 <label class="form-label fw-semibold">Position <span class="text-danger">*</span></label>
                                 <select name="position" class="form-select @error('position') is-invalid @enderror" required>
                                     <option value="">-- Sélectionner une position --</option>
-                                    @foreach($positions as $key => $value)
+                                    @foreach ($positions as $key => $value)
                                         <option value="{{ $key }}" {{ old('position') == $key ? 'selected' : '' }}>
                                             {{ $value }}
                                         </option>

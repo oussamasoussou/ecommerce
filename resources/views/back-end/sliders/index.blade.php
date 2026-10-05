@@ -24,7 +24,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($sliders as $slider)
+                        @forelse ($sliders as $slider)
                         <tr style="border-bottom: 1px solid #d4d4d4;">
                             <!-- Image -->
                             <td>

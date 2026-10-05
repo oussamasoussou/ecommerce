@@ -27,7 +27,7 @@
                                 <label class="form-label fw-bold">Sous-catégorie</label>
                                 <select name="sous_categorie_id" class="form-select" required>
                                     <option value="">-- Choisir une sous-catégorie --</option>
-                                    @foreach($sousCategories as $sc)
+                                    @foreach ($sousCategories as $sc)
                                         <option value="{{ $sc->id }}" {{ $produit->sous_categorie_id == $sc->id ? 'selected' : '' }}>{{ $sc->name }}</option>
                                     @endforeach
                                 </select>
@@ -36,7 +36,7 @@
                                 <label class="form-label fw-bold">Marque</label>
                                 <select name="marque_id" class="form-select" required>
                                     <option value="">-- Choisir une marque --</option>
-                                    @foreach($marques as $marque)
+                                    @foreach ($marques as $marque)
                                         <option value="{{ $marque->id }}" {{ $produit->sous_categorie_id == $marque->id ? 'selected' : '' }}>{{ $marque->name }}</option>
                                     @endforeach
                                 </select>
@@ -82,7 +82,7 @@
                                     <label class="form-label fw-bold">Images supplémentaires</label>
                                     <input type="file" name="images[]" class="form-control" accept="image/*" multiple>
                                     <div class="mt-2">
-                                        @foreach($produit->images as $img)
+                                        @foreach ($produit->images as $img)
                                             <div class="d-inline-block position-relative me-2 mb-2">
                                                 <img src="{{ asset('storage/' . $img->image_path) }}" alt="image" width="80">
                                                 <button type="button"
@@ -108,7 +108,7 @@
                                         value="{{ $produit->quantite }}">
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">Prix (€)</label>
+                                    <label class="form-label fw-bold">Prix (DT)</label>
                                     <input type="number" step="0.01" name="price" class="form-control" required
                                         value="{{ $produit->prix_ttc }}">
                                 </div>
@@ -122,7 +122,7 @@
                             </div>
                             <div class="mb-3" id="promoPriceContainer"
                                 style="{{ $produit->prix_promotionnel ? '' : 'display:none;' }}">
-                                <label class="form-label fw-bold">Prix Promotionnel (€)</label>
+                                <label class="form-label fw-bold">Prix Promotionnel (DT)</label>
                                 <input type="number" step="0.01" name="prix_promotionnel" class="form-control"
                                     value="{{ $produit->prix_promotionnel }}">
                             </div>
@@ -157,13 +157,13 @@
                             <hr>
                             <h5 class="mb-3 text-primary">Variantes</h5>
                             <div id="variants-container">
-                                @foreach($produit->variants as $index => $variant)
+                                @foreach ($produit->variants as $index => $variant)
                                     <div class="row mb-4 variant-row align-items-end border-bottom pb-3">
                                         <div class="col-md-12">
                                             <label class="form-label fw-bold">Couleurs</label>
                                             <select multiple name="variants[{{ $index }}][couleurs][]"
                                                 class="form-select variant-color-select">
-                                                @foreach($couleurs as $couleur)
+                                                @foreach ($couleurs as $couleur)
                                                     <option value="{{ $couleur->id }}" {{ in_array($couleur->id, [$variant->couleur_id]) ? 'selected' : '' }}>{{ $couleur->name }}</option>
                                                 @endforeach
                                             </select>
@@ -174,7 +174,7 @@
                                             <label class="form-label fw-bold">Tailles</label>
                                             <select multiple name="variants[{{ $index }}][tailles][]"
                                                 class="form-select variant-size-select">
-                                                @foreach($tailles as $taille)
+                                                @foreach ($tailles as $taille)
                                                     <option value="{{ $taille->id }}" {{ in_array($taille->id, [$variant->taille_id]) ? 'selected' : '' }}>{{ $taille->name }}</option>
                                                 @endforeach
                                             </select>
@@ -187,12 +187,12 @@
                                                 class="form-control" min="0" value="{{ $variant->quantite_variant }}">
                                         </div>
                                         <div class="col-md-4 mt-3">
-                                            <label class="form-label fw-bold">Prix TTC (€)</label>
+                                            <label class="form-label fw-bold">Prix TTC (DT)</label>
                                             <input type="number" step="0.01" name="variants[{{ $index }}][prix_ttc_variant]"
                                                 class="form-control" value="{{ $variant->prix_ttc_variant }}">
                                         </div>
                                         <div class="col-md-4 mt-3">
-                                            <label class="form-label fw-bold">Prix promo (€)</label>
+                                            <label class="form-label fw-bold">Prix promo (DT)</label>
                                             <input type="number" step="0.01"
                                                 name="variants[{{ $index }}][prix_promotionnel_variant]" class="form-control"
                                                 value="{{ $variant->prix_promotionnel_variant }}">

@@ -32,7 +32,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($items as $item)
+                            @foreach ($items as $item)
                             @php $produit = $item->produit; @endphp
                             <tr class="pt-30">
                                 <td class="custome-checkbox pl-30">
@@ -61,10 +61,10 @@
                                 </td>
                                 <td class="price" data-title="Price">
                                     @if($produit->prix_promotionnel)
-                                        <h3 class="text-brand">{{ number_format($produit->prix_promotionnel, 2, ',', ' ') }} €</h3>
-                                        <del class="old-price">{{ number_format($produit->prix_ttc, 2, ',', ' ') }} €</del>
+                                        <h3 class="text-brand">{{ number_format($produit->prix_promotionnel, 2, ',', ' ') }} DT</h3>
+                                        <del class="old-price">{{ number_format($produit->prix_ttc, 2, ',', ' ') }} DT</del>
                                     @else
-                                        <h3 class="text-brand">{{ number_format($produit->prix_ttc, 2, ',', ' ') }} €</h3>
+                                        <h3 class="text-brand">{{ number_format($produit->prix_ttc, 2, ',', ' ') }} DT</h3>
                                     @endif
                                 </td>
                                 <td class="text-center detail-info" data-title="Stock">

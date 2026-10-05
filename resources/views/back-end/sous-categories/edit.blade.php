@@ -41,7 +41,7 @@
                                 <label class="form-label fw-semibold">Catégorie parente <span class="text-danger">*</span></label>
                                 <select name="categorie_id" class="form-select @error('categorie_id') is-invalid @enderror" required>
                                     <option value="">-- Sélectionner une catégorie --</option>
-                                    @foreach($categories as $category)
+                                    @foreach ($categories as $category)
                                         <option value="{{ $category->id }}" {{ old('categorie_id', $sousCategorie->categorie_id) == $category->id ? 'selected' : '' }}>
                                             {{ $category->name }}
                                         </option>

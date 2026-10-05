@@ -25,7 +25,7 @@
                                 <label class="form-label fw-bold">Sous-catégorie</label>
                                 <select name="sous_categorie_id" class="form-select" required>
                                     <option value="">-- Choisir une sous-catégorie --</option>
-                                    @foreach($sousCategories as $sc)
+                                    @foreach ($sousCategories as $sc)
                                         <option value="{{ $sc->id }}">{{ $sc->name }}</option>
                                     @endforeach
                                 </select>
@@ -34,7 +34,7 @@
                                 <label class="form-label fw-bold">Marque</label>
                                 <select name="marque_id" class="form-select" required>
                                     <option value="">-- Choisir une marque --</option>
-                                    @foreach($marques as $marque)
+                                    @foreach ($marques as $marque)
                                         <option value="{{ $marque->id }}">{{ $marque->name }}</option>
                                     @endforeach
                                 </select>
@@ -98,7 +98,7 @@
                                     <input type="number" name="quantite" class="form-control" required min="0">
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">Prix (€)</label>
+                                    <label class="form-label fw-bold">Prix (DT)</label>
                                     <input type="number" step="0.01" name="price" class="form-control" required>
                                 </div>
                             </div>
@@ -110,7 +110,7 @@
                                 <label class="form-check-label fw-bold" for="promoCheck">En promotion</label>
                             </div>
                             <div class="mb-3" id="promoPriceContainer" style="display: none;">
-                                <label class="form-label fw-bold">Prix Promotionnel (€)</label>
+                                <label class="form-label fw-bold">Prix Promotionnel (DT)</label>
                                 <input type="number" step="0.01" name="prix_promotionnel" class="form-control">
                             </div>
 
@@ -145,7 +145,7 @@
                                     <div class="col-md-12">
                                         <label class="form-label fw-bold">Couleurs</label>
                                         <select multiple name="variants[0][couleurs][]" class="form-select">
-                                            @foreach($couleurs as $couleur)
+                                            @foreach ($couleurs as $couleur)
                                                 <option value="{{ $couleur->id }}">{{ $couleur->name }}</option>
                                             @endforeach
                                         </select>
@@ -154,7 +154,7 @@
                                     <div class="col-md-12">
                                         <label class="form-label fw-bold">Tailles</label>
                                         <select multiple name="variants[0][tailles][]" class="form-select">
-                                            @foreach($tailles as $taille)
+                                            @foreach ($tailles as $taille)
                                                 <option value="{{ $taille->id }}">{{ $taille->name }}</option>
                                             @endforeach
                                         </select>
@@ -166,12 +166,12 @@
                                             min="0">
                                     </div>
                                     <div class="col-md-4 mt-3">
-                                        <label class="form-label fw-bold">Prix TTC (€)</label>
+                                        <label class="form-label fw-bold">Prix TTC (DT)</label>
                                         <input type="number" step="0.01" name="variants[0][prix_ttc_variant]"
                                             class="form-control">
                                     </div>
                                     <div class="col-md-4 mt-3">
-                                        <label class="form-label fw-bold">Prix promo (€)</label>
+                                        <label class="form-label fw-bold">Prix promo (DT)</label>
                                         <input type="number" step="0.01" name="variants[0][prix_promotionnel_variant]"
                                             class="form-control">
                                     </div>

@@ -18,7 +18,7 @@
                 <div class="row">
                     <!-- Prix -->
                     <div class="col-md-12 mb-4">
-                        <label class="form-label fw-semibold">Prix (€) <span class="text-danger">*</span></label>
+                        <label class="form-label fw-semibold">Prix (DT) <span class="text-danger">*</span></label>
                         <div class="input-group">
                             <input type="number" 
                                    name="prix" 
@@ -29,12 +29,12 @@
                                    min="0" 
                                    max="9999999.99" 
                                    required>
-                            <span class="input-group-text">€</span>
+                            <span class="input-group-text">DT</span>
                             @error('prix')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <small class="text-muted">Prix actuel: <strong>{{ number_format($delivery->prix, 2, ',', ' ') }} €</strong></small>
+                        <small class="text-muted">Prix actuel: <strong>{{ number_format($delivery->prix, 2, ',', ' ') }} DT</strong></small>
                     </div>
 
                     <!-- Informations supplémentaires -->
