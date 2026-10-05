@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
 use App\Http\Middleware\SyncCart;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -16,6 +17,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->appendToGroup('web', [
             SyncCart::class,
         ]);
+
+        // Visiteurs non connectés : login client pour la boutique, login admin pour le back-office
+        $middleware->redirectGuestsTo(function (Request $request) {
+            return $request->is('wishlist*', 'account*', 'cart*', 'orders*')
+                ? route('frontend.login')
+                : route('login');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

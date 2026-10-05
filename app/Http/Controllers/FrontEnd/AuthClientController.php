@@ -36,26 +36,47 @@ class AuthClientController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'login' => 'required|string|max:255',
             'password' => 'required|min:6',
+        ], [
+            'login.required' => 'Veuillez saisir votre email ou votre numéro de téléphone.',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
-                ->withInput();
+                ->withInput($request->except('password'));
         }
 
-        $credentials = $request->only('email', 'password');
+        $login = trim($request->input('login'));
+        $remember = $request->boolean('remember');
 
-        if (Auth::attempt($credentials)) {
+        // ID de session du visiteur, avant que regenerate() ne le change
+        $guestSessionId = $request->session()->getId();
+
+        // Email si le champ contient "@", sinon numéro de téléphone
+        if (str_contains($login, '@')) {
+            $authenticated = Auth::attempt(['email' => $login, 'password' => $request->password], $remember);
+        } else {
+            $authenticated = false;
+            $matches = User::findByPhone($login);
+
+            // Un seul compte doit correspondre à ce numéro
+            if ($matches->count() === 1 && Hash::check($request->password, $matches->first()->password)) {
+                Auth::login($matches->first(), $remember);
+                $authenticated = true;
+            }
+        }
+
+        if ($authenticated) {
             $request->session()->regenerate();
 
-            // Synchroniser le panier
-            Cart::syncCart(Auth::id());
+            // Vérifier s'il y avait des articles dans le panier du visiteur
+            $cartCount = Cart::where('session_id', $guestSessionId)->whereNull('user_id')->count();
 
-            // Vérifier s'il y avait des articles dans le panier
-            $cartCount = Cart::where('session_id', session()->getId())->count();
+            // Synchroniser le panier
+            Cart::syncCart(Auth::id(), $guestSessionId);
+            $request->session()->put('cart_synced', true);
 
             // Message personnalisé
             $message = 'Connexion réussie !';
@@ -70,8 +91,8 @@ class AuthClientController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'Les identifiants ne correspondent pas.',
-        ])->withInput();
+            'login' => 'Les identifiants ne correspondent pas.',
+        ])->withInput($request->except('password'));
     }
 
     // Dans la méthode register
@@ -80,13 +101,21 @@ class AuthClientController extends Controller
         $validator = Validator::make($request->all(), [
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users',
             'email' => 'required|email|unique:users',
-            'phone' => 'nullable|string|max:20',
+            'phone' => [
+                'required', 'string', 'max:20',
+                // Le téléphone sert d'identifiant de connexion : il doit être unique, quel que soit le format
+                function ($attribute, $value, $fail) {
+                    if (strlen(User::normalizePhone($value)) < 8) {
+                        $fail('Le numéro de téléphone n\'est pas valide.');
+                    } elseif (User::findByPhone($value)->isNotEmpty()) {
+                        $fail('Ce numéro de téléphone est déjà utilisé par un autre compte.');
+                    }
+                },
+            ],
             'password' => 'required|min:6|confirmed',
-            'address' => 'nullable|string|max:500',
-            'city' => 'nullable|string|max:255',
-            'country' => 'nullable|string|max:255',
+            'address' => 'required|string|max:500',
+            'city' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -99,7 +128,6 @@ class AuthClientController extends Controller
         $user = User::create([
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
-            'username' => $request->username,
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
@@ -107,7 +135,6 @@ class AuthClientController extends Controller
             'is_active' => true,
             'address' => $request->address,
             'city' => $request->city,
-            'country' => $request->country,
         ]);
 
         // Connecter automatiquement l'utilisateur après l'inscription
@@ -124,7 +151,7 @@ class AuthClientController extends Controller
             $message = 'Votre compte a été créé avec succès! Votre panier a été synchronisé.';
         }
 
-        return redirect('/')->with('success', $message);
+        return redirect()->intended('/')->with('success', $message);
     }
     public function showRegisterForm()
     {

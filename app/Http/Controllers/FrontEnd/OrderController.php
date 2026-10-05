@@ -35,7 +35,7 @@ class OrderController extends Controller
     }
 
     // Méthode utilitaire pour créer une commande depuis un panier (utilisée par CheckoutController après paiement)
-    public function createFromCart(int $userId, array $cart, array $billing)
+    public function createFromCart(?int $userId, array $cart, array $billing)
     {
         DB::beginTransaction();
         try {

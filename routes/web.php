@@ -130,16 +130,17 @@ Route::prefix('cart')->group(function () {
     Route::get('/total', [CartController::class, 'getTotal'])->name('cart.total');
 });
 
+// Checkout : accessible sans connexion (commande en tant qu'invité)
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
+Route::get('/checkout/confirmation', [CheckoutController::class, 'confirmation'])->name('checkout.confirmation');
+
 // Wishlist
 Route::middleware('auth')->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
     Route::post('/wishlist/add/{produit}', [WishlistController::class, 'add'])->name('wishlist.add');
     Route::delete('/wishlist/remove/{produit}', [WishlistController::class, 'remove'])->name('wishlist.remove');
-
-    // Checkout / orders
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
 
     // Account
     Route::get('/account', [AccountController::class, 'profile'])->name('account.profile');

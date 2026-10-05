@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&amp;family=Amiri:wght@700&amp;family=Montserrat:wght@600&amp;display=swap');
+    .bg { fill: #FFFFFF; }
+    .text-arabic { font-family: 'Amiri', 'Traditional Arabic', serif; font-weight: 700; fill: #C85A32; font-size: 80px; text-anchor: middle; }
+    .text-title { font-family: 'Cinzel', 'Georgia', serif; font-weight: 700; fill: #5C3A21; font-size: 96px; letter-spacing: 14px; text-anchor: middle; }
+    .text-subtitle { font-family: 'Montserrat', sans-serif; font-weight: 600; fill: #3B6B4C; font-size: 24px; letter-spacing: 12px; text-anchor: middle; text-transform: uppercase; }
+  </style>
+
+  <!-- Fond Blanc Pur -->
+  <rect class="bg" width="1600" height="900" />
+
+  <!-- Texte Arabe : دار العولة -->
+  <text x="800" y="310" class="text-arabic">دار العـولة</text>
+
+  <!-- Élément décoratif minimaliste central (Épi de blé & Feuille d'olivier) -->
+  <g transform="translate(800, 390)">
+    <!-- Épi de blé (Bsissa) -->
+    <path d="M -6,20 Q -24,-5 -42,-30 M -18,8 Q -36,2 -38,-12 M -26,-8 Q -45,-16 -45,-32" stroke="#D4A359" stroke-width="3" stroke-linecap="round" fill="none" />
+    
+    <!-- Feuille d'olivier (Huile d'olive) -->
+    <path d="M 6,20 Q 24,-5 42,-30 M 14,2 Q 38,0 34,-20 Q 14,-10 14,2" stroke="#3B6B4C" stroke-width="3" stroke-linecap="round" fill="#3B6B4C" fill-opacity="0.2" />
+    
+    <!-- Losange central terre cuite -->
+    <polygon points="0,-7 7,0 0,7 -7,0" fill="#C85A32" />
+  </g>
+
+  <!-- Titre Principal : DAR EL 3OULA -->
+  <text x="800" y="520" class="text-title">DAR EL 3OULA</text>
+
+  <!-- Ligne de séparation élégante -->
+  <g transform="translate(800, 575)">
+    <line x1="-300" y1="0" x2="300" y2="0" stroke="#E6D7C3" stroke-width="2" />
+    <circle cx="0" cy="0" r="4" fill="#C85A32" />
+  </g>
+
+  <!-- Sous-titre : BSISSA & PRODUITS TRADITIONNELS -->
+  <text x="800" y="640" class="text-subtitle">BSISSA &amp; PRODUITS TRADITIONNELS</text>
+</svg>

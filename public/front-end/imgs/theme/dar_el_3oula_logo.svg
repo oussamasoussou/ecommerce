@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F5E5C8"/>
+      <stop offset="1" stop-color="#EAD1A7"/>
+    </linearGradient>
+    <pattern id="pattern" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M40 8L72 40L40 72L8 40Z M40 22L58 40L40 58L22 40Z" fill="none" stroke="#6C7445" stroke-width="4"/>
+      <circle cx="40" cy="40" r="5" fill="#A64B20"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect x="22" y="22" width="1556" height="856" rx="28" fill="none" stroke="#A64B20" stroke-width="5"/>
+  <rect x="42" y="42" width="1516" height="816" rx="22" fill="none" stroke="#6C7445" stroke-width="2"/>
+
+  <!-- Decorative corners -->
+  <path d="M42 190V42H190" fill="none" stroke="#A64B20" stroke-width="18"/>
+  <path d="M1558 190V42H1410" fill="none" stroke="#6C7445" stroke-width="18"/>
+  <path d="M42 710V858H190" fill="none" stroke="#6C7445" stroke-width="18"/>
+  <path d="M1558 710V858H1410" fill="none" stroke="#A64B20" stroke-width="18"/>
+
+  <!-- Small traditional motifs -->
+  <g transform="translate(70 70) scale(.9)">
+    <rect width="115" height="115" fill="url(#pattern)" opacity=".85"/>
+  </g>
+  <g transform="translate(1415 715) scale(.9)">
+    <rect width="115" height="115" fill="url(#pattern)" opacity=".85"/>
+  </g>
+
+  <!-- Central arch / house -->
+  <g transform="translate(800 185)">
+    <path d="M-185 75 Q-185 -65 0 -150 Q185 -65 185 75" fill="none" stroke="#8A3F18" stroke-width="20" stroke-linecap="round"/>
+    <path d="M-72 75 V-20 Q-72 -78 0 -112 Q72 -78 72 -20 V75" fill="none" stroke="#8A3F18" stroke-width="13"/>
+    <path d="M0 -112 V75" stroke="#8A3F18" stroke-width="7"/>
+    <circle cx="0" cy="-145" r="9" fill="#8A3F18"/>
+    <!-- olive branch -->
+    <path d="M92 42 Q125 0 151 -42" fill="none" stroke="#4D6840" stroke-width="8" stroke-linecap="round"/>
+    <ellipse cx="115" cy="9" rx="13" ry="25" transform="rotate(42 115 9)" fill="#4D6840"/>
+    <ellipse cx="136" cy="-18" rx="13" ry="25" transform="rotate(42 136 -18)" fill="#4D6840"/>
+    <ellipse cx="98" cy="35" rx="12" ry="22" transform="rotate(42 98 35)" fill="#4D6840"/>
+  </g>
+
+  <!-- Brand name -->
+  <text x="800" y="390" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="112" font-weight="700" fill="#6B3217">
+    Dar el 3oula
+  </text>
+
+  <!-- Divider -->
+  <g transform="translate(800 455)">
+    <path d="M-430 0H-100 M100 0H430" stroke="#8A3F18" stroke-width="5"/>
+    <path d="M-112 0 l22 -22 l22 22 l-22 22 z M112 0 l-22 -22 l-22 22 l22 22 z"
+          fill="none" stroke="#6C7445" stroke-width="7"/>
+    <!-- Tunisian crescent & star -->
+    <circle cx="0" cy="0" r="43" fill="#C83A2B"/>
+    <circle cx="-8" cy="-5" r="24" fill="#F5E5C8"/>
+    <circle cx="0" cy="-5" r="24" fill="#C83A2B"/>
+    <path d="M12 -5 l8 24 l-20 -15 h24 l-20 15 z" fill="#F5E5C8"/>
+  </g>
+
+  <!-- Subtitle -->
+  <text x="800" y="525" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="32" letter-spacing="6" fill="#6B3217">
+    BSISSA &amp; PRODUITS TRADITIONNELS TUNISIENS
+  </text>
+
+  <!-- Bsissa bowl -->
+  <g transform="translate(250 625)">
+    <ellipse cx="0" cy="115" rx="205" ry="42" fill="#7B3D1D" opacity=".25"/>
+    <path d="M-190 0 Q0 80 190 0 L160 130 Q0 210 -160 130Z" fill="#9A4B23"/>
+    <path d="M-160 12 Q0 75 160 12 L145 112 Q0 175 -145 112Z" fill="#D77B36"/>
+    <path d="M-150 35 Q0 95 150 35" fill="none" stroke="#5E2D18" stroke-width="12"/>
+    <path d="M-145 75 Q0 135 145 75" fill="none" stroke="#5E2D18" stroke-width="8"/>
+    <path d="M-105 112 l35 -25 l35 25 l-35 25 z M35 112 l35 -25 l35 25 l-35 25 z"
+          fill="none" stroke="#5E2D18" stroke-width="7"/>
+    <!-- bsissa -->
+    <path d="M-135 0 Q0 -145 135 0 Q0 65 -135 0Z" fill="#C69A58"/>
+    <path d="M-110 -5 Q0 -115 110 -5 Q0 35 -110 -5Z" fill="#D7B36E"/>
+    <!-- wooden spoon -->
+    <path d="M95 -35 L190 -145" stroke="#70401F" stroke-width="18" stroke-linecap="round"/>
+    <ellipse cx="199" cy="-156" rx="28" ry="42" transform="rotate(38 199 -156)" fill="#9A6130"/>
+  </g>
+
+  <!-- Olive branch on right -->
+  <g transform="translate(1290 630)">
+    <path d="M-40 120 Q20 10 100 -75" fill="none" stroke="#4D6840" stroke-width="10"/>
+    <ellipse cx="0" cy="85" rx="18" ry="38" transform="rotate(40 0 85)" fill="#5D7846"/>
+    <ellipse cx="35" cy="42" rx="18" ry="38" transform="rotate(40 35 42)" fill="#5D7846"/>
+    <ellipse cx="65" cy="5" rx="18" ry="38" transform="rotate(40 65 5)" fill="#5D7846"/>
+    <ellipse cx="95" cy="-38" rx="18" ry="38" transform="rotate(40 95 -38)" fill="#5D7846"/>
+    <circle cx="18" cy="70" r="9" fill="#A77A2C"/>
+    <circle cx="52" cy="28" r="9" fill="#A77A2C"/>
+    <circle cx="83" cy="-15" r="9" fill="#A77A2C"/>
+  </g>
+
+  <!-- Bottom decorative line -->
+  <path d="M330 790 H1270" stroke="#A64B20" stroke-width="4"/>
+  <path d="M330 790 l25 -25 l25 25 l-25 25 z M1270 790 l-25 -25 l-25 25 l25 25 z"
+        fill="none" stroke="#6C7445" stroke-width="5"/>
+</svg>

@@ -107,8 +107,8 @@
         }
 
         .color-option.selected {
-            border-color: #3bb77e;
-            box-shadow: 0 0 0 2px rgba(59, 183, 126, 0.3);
+            border-color: #148b41;
+            box-shadow: 0 0 0 2px rgba(93, 112, 82, 0.3);
         }
 
         .color-option.selected::after {
@@ -141,16 +141,16 @@
         }
 
         .size-option:hover:not(.selected) {
-            border-color: #3bb77e;
-            color: #3bb77e;
+            border-color: #148b41;
+            color: #148b41;
             transform: translateY(-2px);
         }
 
         .size-option.selected {
-            background: #3bb77e;
-            border-color: #3bb77e;
+            background: #148b41;
+            border-color: #148b41;
             color: white;
-            box-shadow: 0 4px 12px rgba(59, 183, 126, 0.3);
+            box-shadow: 0 4px 12px rgba(93, 112, 82, 0.3);
         }
 
         .size-option.disabled {
@@ -168,7 +168,7 @@
         }
 
         .quantity-selector:hover {
-            border-color: #3bb77e !important;
+            border-color: #148b41 !important;
         }
 
         .qty-btn {
@@ -185,7 +185,7 @@
 
         .qty-btn:hover {
             background: #f8f9fa;
-            color: #3bb77e;
+            color: #148b41;
         }
 
         .qty-btn:active {
@@ -205,7 +205,7 @@
 
         /* Boutons */
         .btn-primary {
-            background: linear-gradient(135deg, #3bb77e 0%, #2a9d68 100%);
+            background: linear-gradient(135deg, #148b41 0%, #4A5A41 100%);
             border: none;
             border-radius: 10px;
             font-weight: 600;
@@ -215,19 +215,19 @@
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(59, 183, 126, 0.3);
+            box-shadow: 0 8px 20px rgba(93, 112, 82, 0.3);
         }
 
         .btn-outline-primary {
-            border: 2px solid #3bb77e;
-            color: #3bb77e;
+            border: 2px solid #148b41;
+            color: #148b41;
             border-radius: 10px;
             font-weight: 600;
             transition: all 0.3s ease;
         }
 
         .btn-outline-primary:hover {
-            background: #3bb77e;
+            background: #148b41;
             color: white;
             transform: translateY(-2px);
         }
@@ -240,7 +240,7 @@
         }
 
         .additional-info i {
-            color: #3bb77e;
+            color: #148b41;
         }
 
         /* Badge promotion */
@@ -334,8 +334,8 @@
         }
 
         .image-thumbnails .thumbnail.active {
-            border-color: #3bb77e;
-            box-shadow: 0 0 0 2px rgba(59, 183, 126, 0.2);
+            border-color: #148b41;
+            box-shadow: 0 0 0 2px rgba(93, 112, 82, 0.2);
         }
 
         /* Scroll personnalisé pour le modal */
@@ -349,12 +349,12 @@
         }
 
         .modal-body::-webkit-scrollbar-thumb {
-            background: #3bb77e;
+            background: #148b41;
             border-radius: 4px;
         }
 
         .modal-body::-webkit-scrollbar-thumb:hover {
-            background: #2a9d68;
+            background: #4A5A41;
         }
 
         /* Dans app.blade.php, dans la section <style> */
@@ -370,7 +370,7 @@
 
             50% {
                 transform: scale(1.2);
-                color: #3bb77e;
+                color: #148b41;
             }
 
             100% {
@@ -392,8 +392,8 @@
         }
 
         .qty-input:focus {
-            border-color: #3bb77e;
-            box-shadow: 0 0 0 0.2rem rgba(59, 183, 126, 0.25);
+            border-color: #148b41;
+            box-shadow: 0 0 0 0.2rem rgba(93, 112, 82, 0.25);
         }
 
 
@@ -407,13 +407,13 @@
         }
 
         .color-option.selected {
-            border: 3px solid #3bb77e !important;
-            box-shadow: 0 0 5px rgba(59, 183, 126, 0.5);
+            border: 3px solid #148b41 !important;
+            box-shadow: 0 0 5px rgba(93, 112, 82, 0.5);
         }
 
         .size-option.btn-primary {
-            background-color: #3bb77e !important;
-            border-color: #3bb77e !important;
+            background-color: #148b41 !important;
+            border-color: #148b41 !important;
             color: white !important;
         }
 
@@ -581,7 +581,7 @@
         }
 
         .thumbnail-item.active {
-            border-color: #3bb77e;
+            border-color: #148b41;
             /* Couleur de votre thème */
         }
 
@@ -665,7 +665,7 @@
         }
 
         .thumb-gallery img.active {
-            border-color: #3BB77E;
+            border-color: #148b41;
         }
 
         .detail-qty {
@@ -694,7 +694,7 @@
         }
 
         .button-add-to-cart {
-            background: #3BB77E;
+            background: #148b41;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -703,7 +703,7 @@
         }
 
         .button-add-to-cart:hover {
-            background: #2a9d68;
+            background: #4A5A41;
         }
 
         /* Styles pour les bannières */
@@ -800,11 +800,17 @@
 </head>
 
 <body>
-    @include('front-end.partials.header')
+    {{-- Une page peut masquer le header avec : @section('hide_header', true) --}}
+    @unless(View::hasSection('hide_header'))
+        @include('front-end.partials.header')
+    @endunless
     <main class="main">
         @yield('content')
     </main>
-    @include('front-end.partials.footer')
+    {{-- Une page peut masquer le footer avec : @section('hide_footer', true) --}}
+    @unless(View::hasSection('hide_footer'))
+        @include('front-end.partials.footer')
+    @endunless
 
     @include('front-end.modals.add-to-cart')
 
@@ -1895,7 +1901,7 @@
 
                     // Sélectionner cette couleur
                     this.classList.add('selected');
-                    this.style.borderColor = '#3bb77e';
+                    this.style.borderColor = '#148b41';
 
                     // Afficher les tailles pour cette couleur
                     displaySizesForColor(colorData.sizes, selectors);
@@ -2148,7 +2154,7 @@ document.addEventListener('submit', function(e) {
                         showCancelButton: true,
                         confirmButtonText: 'Voir le panier',
                         cancelButtonText: 'Continuer mes achats',
-                        confirmButtonColor: '#3bb77e',
+                        confirmButtonColor: '#148b41',
                         cancelButtonColor: '#6c757d',
                         reverseButtons: true
                     }).then(result => {
@@ -2209,7 +2215,7 @@ document.addEventListener('submit', function(e) {
 </body>
 
 </html>
-elevatezoom.js') }}"></script>
+</script>
     <!-- Template  JS -->
     <script src=" {{ asset('front-end/js/main.js?v=6.1') }}"></script>
     <script src=" {{ asset('front-end/js/shop.js?v=6.1') }}"></script>

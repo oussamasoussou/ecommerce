@@ -82,4 +82,39 @@ class User extends Authenticatable
         return $this->wishlists()->count();
     }
 
+    /**
+     * Normalise un numéro de téléphone pour la comparaison :
+     * chiffres uniquement, sans l'indicatif tunisien (+216 / 00216).
+     */
+    public static function normalizePhone(?string $phone): string
+    {
+        $digits = preg_replace('/\D+/', '', (string) $phone);
+
+        if (strlen($digits) > 8) {
+            $digits = preg_replace('/^(00216|216)/', '', $digits);
+        }
+
+        return $digits;
+    }
+
+    /**
+     * Retrouve les utilisateurs dont le téléphone correspond, quel que soit le format saisi.
+     */
+    public static function findByPhone(?string $phone)
+    {
+        $normalized = self::normalizePhone($phone);
+
+        if (strlen($normalized) < 6) {
+            return collect();
+        }
+
+        // Pré-filtre SQL sur les 2 derniers chiffres (jamais séparés par un espace),
+        // puis comparaison exacte des numéros normalisés en PHP
+        return self::whereNotNull('phone')
+            ->where('phone', 'like', '%' . substr($normalized, -2))
+            ->get()
+            ->filter(fn ($user) => self::normalizePhone($user->phone) === $normalized)
+            ->values();
+    }
+
 }

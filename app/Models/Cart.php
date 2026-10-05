@@ -235,9 +235,13 @@ class Cart extends Model
         }
     }
 
-    public static function syncCart($userId)
+    /**
+     * @param  string|null  $sessionId  ID de session du visiteur. À fournir quand la
+     *                                  session vient d'être régénérée (connexion).
+     */
+    public static function syncCart($userId, $sessionId = null)
     {
-        $sessionId = session()->getId();
+        $sessionId = $sessionId ?? session()->getId();
 
         // Récupérer tous les articles du panier de session
         $sessionCart = self::with(['produit', 'variant'])

@@ -45,7 +45,7 @@ class WishlistController extends Controller
 
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login');
+            return redirect()->route('frontend.login');
         }
 
         $produitId = $request->produit_id;
@@ -71,7 +71,7 @@ class WishlistController extends Controller
     {
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login');
+            return redirect()->route('frontend.login');
         }
 
         $user->wishlists()->firstOrCreate([
@@ -85,7 +85,7 @@ class WishlistController extends Controller
     {
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login');
+            return redirect()->route('frontend.login');
         }
 
         $user->wishlists()->where('produit_id', $produitId)->delete();

@@ -34,7 +34,7 @@
         <div class="container">
             <div class="header-wrap">
                 <div class="logo logo-width-1">
-                    <a href="index.html"><img src="{{ asset('front-end/imgs/theme/logo.png') }}" alt="logo" /></a>
+                    <a href="{{ url('/') }}"><img src="{{ asset('front-end/imgs/theme/dar_el_3oula.svg') }}" alt="logo" /></a>
                 </div>
                 <div class="header-right">
                     <div class="search-style-2">
@@ -194,7 +194,7 @@
         <div class="container">
             <div class="header-wrap header-space-between position-relative">
                 <div class="logo logo-width-1 d-block d-lg-none">
-                    <a href="index.html"><img src="{{ asset('front-end/imgs/theme/logo.png') }}" alt="logo" /></a>
+                    <a href="{{ url('/') }}"><img src="{{ asset('front-end/imgs/theme/dar_el_3oula.svg') }}" alt="logo" /></a>
                 </div>
                 <div class="header-nav d-none d-lg-flex">
                     <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block font-heading">
@@ -283,7 +283,7 @@
     <div class="mobile-header-wrapper-inner">
         <div class="mobile-header-top">
             <div class="mobile-header-logo">
-                <a href="index.html"><img src="{{ asset('front-end/imgs/theme/logo.png') }}" alt="logo" /></a>
+                <a href="{{ url('/') }}"><img src="{{ asset('front-end/imgs/theme/dar_el_3oula.svg') }}" alt="logo" /></a>
             </div>
             <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                 <button class="close-style search-close">
