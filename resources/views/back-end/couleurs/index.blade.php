@@ -56,57 +56,13 @@
                     </tbody>
                 </table>
             </div>
+
+                {{-- Pagination --}}
+                @include('back-end.partials.pagination', ['paginator' => $couleurs])
         </div>
     </div>
 
     {{-- Pagination --}}
-    @if($couleurs->hasPages())
-    <div class="pagination-area mt-30 mb-50">
-        <nav>
-            <ul class="pagination justify-content-center">
-                {{-- Lien précédent --}}
-                @if ($couleurs->onFirstPage())
-                    <li class="page-item disabled">
-                        <span class="page-link">&laquo;</span>
-                    </li>
-                @else
-                    <li class="page-item">
-                        <a class="page-link" href="{{ $couleurs->previousPageUrl() }}" rel="prev">&laquo;</a>
-                    </li>
-                @endif
-
-                {{-- Numéros de pages --}}
-                @foreach ($couleurs->getUrlRange(1, $couleurs->lastPage()) as $page => $url)
-                    @if ($page == $couleurs->currentPage())
-                        <li class="page-item active">
-                            <span class="page-link">{{ $page }}</span>
-                        </li>
-                    @else
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                        </li>
-                    @endif
-                @endforeach
-
-                {{-- Lien suivant --}}
-                @if ($couleurs->hasMorePages())
-                    <li class="page-item">
-                        <a class="page-link" href="{{ $couleurs->nextPageUrl() }}" rel="next">&raquo;</a>
-                    </li>
-                @else
-                    <li class="page-item disabled">
-                        <span class="page-link">&raquo;</span>
-                    </li>
-                @endif
-            </ul>
-        </nav>
-        
-        {{-- Informations de pagination --}}
-        <div class="text-center text-muted mt-2">
-            Affichage de {{ $couleurs->firstItem() ?? 0 }} à {{ $couleurs->lastItem() ?? 0 }} sur {{ $couleurs->total() }} couleurs
-        </div>
-    </div>
-    @endif
 
 </section>
 @endsection

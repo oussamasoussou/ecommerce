@@ -6,6 +6,7 @@ use App\Http\Controllers\BackEnd\CategoryController;
 use App\Http\Controllers\BackEnd\CouleurController;
 use App\Http\Controllers\BackEnd\DeliveryController;
 use App\Http\Controllers\BackEnd\MarqueController;
+use App\Http\Controllers\BackEnd\OrderController as AdminOrderController;
 use App\Http\Controllers\BackEnd\ProduitController;
 use App\Http\Controllers\BackEnd\SliderController;
 use App\Http\Controllers\BackEnd\SousCategorieController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\FrontEnd\AuthClientController;
 use App\Http\Controllers\FrontEnd\CartController;
 use App\Http\Controllers\FrontEnd\CheckoutController;
 use App\Http\Controllers\FrontEnd\OrderController;
+use App\Http\Controllers\FrontEnd\PageController;
 use App\Http\Controllers\FrontEnd\SearchController;
 use App\Http\Controllers\FrontEnd\ShopController;
 use App\Http\Controllers\FrontEnd\WishlistController;
@@ -30,7 +32,7 @@ Route::get('/test', function () {
 });
 
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('login', [AuthController::class, 'login'])->name('login.post');
+Route::post('login', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login.post');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/recherche', [SearchController::class, 'search'])->name('frontend.search');
@@ -38,20 +40,21 @@ Route::get('/recherche', [SearchController::class, 'search'])->name('frontend.se
 // Routes d'authentification frontend
 Route::prefix('frontend/auth')->group(function () {
     Route::get('/login', [AuthClientController::class, 'showLoginForm'])->name('frontend.login');
-    Route::post('/login', [AuthClientController::class, 'login'])->name('frontend.login.post');
+    Route::post('/login', [AuthClientController::class, 'login'])->middleware('throttle:5,1')->name('frontend.login.post');
     Route::get('/register', [AuthClientController::class, 'showRegisterForm'])->name('frontend.register');
-    Route::post('/register', [AuthClientController::class, 'register'])->name('frontend.register.post');
+    Route::post('/register', [AuthClientController::class, 'register'])->middleware('throttle:5,1')->name('frontend.register.post');
     Route::post('/logout', [AuthClientController::class, 'logout'])->name('frontend.logout');
 });
 
 
-Route::middleware(['auth'])->group(function () {
+// Back-office : réservé aux administrateurs
+Route::middleware(['auth', 'admin'])->group(function () {
 
-    Route::resource('sliders', SliderController::class);
+    Route::resource('sliders', SliderController::class)->except(['show']);
     Route::put('sliders/{slider}/toggle-status', [SliderController::class, 'toggleStatus'])->name('sliders.toggle-status');
     Route::post('sliders/update-order', [SliderController::class, 'updateOrder'])->name('sliders.update-order');
 
-    Route::resource('bannieres', BanniereController::class);
+    Route::resource('bannieres', BanniereController::class)->except(['show']);
     Route::put('bannieres/{banniere}/toggle-status', [BanniereController::class, 'toggleStatus'])->name('bannieres.toggle-status');
 
     Route::prefix('categories')->group(function () {
@@ -102,9 +105,16 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('produits/images/{image}', [ProduitController::class, 'deleteImage'])->name('produits.images.destroy');
 
 
-    Route::resource('marques', MarqueController::class);
+    Route::resource('marques', MarqueController::class)->except(['show']);
 
-    Route::resource('deliveries', DeliveryController::class);
+    Route::resource('deliveries', DeliveryController::class)->except(['show']);
+
+    // Commandes (back-office)
+    Route::prefix('admin/commandes')->name('admin.orders.')->group(function () {
+        Route::get('/', [AdminOrderController::class, 'index'])->name('index');
+        Route::get('/{order}', [AdminOrderController::class, 'show'])->name('show');
+        Route::patch('/{order}/statut', [AdminOrderController::class, 'updateStatus'])->name('status');
+    });
 
 
 });
@@ -130,6 +140,11 @@ Route::prefix('cart')->group(function () {
     Route::get('/total', [CartController::class, 'getTotal'])->name('cart.total');
 });
 
+// Pages d'information (contact, livraison, retours, CGV, mentions légales, confidentialité)
+Route::get('/{slug}', [PageController::class, 'show'])
+    ->whereIn('slug', ['contact', 'livraison', 'retours', 'cgv', 'mentions-legales', 'confidentialite'])
+    ->name('pages.show');
+
 // Checkout : accessible sans connexion (commande en tant qu'invité)
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
@@ -147,10 +162,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/account/profile', [AccountController::class, 'updateProfile'])->name('account.updateProfile');
     Route::post('/account/password', [AccountController::class, 'changePassword'])->name('account.changePassword');
     Route::get('/account/orders', [AccountController::class, 'orders'])->name('account.orders');
-});
 
-// Orders admin/customer
-Route::resource('orders', OrderController::class)->only(['index', 'show']);
+    // Commandes : un client ne voit que les siennes (contrôle dans OrderController)
+    Route::resource('orders', OrderController::class)->only(['index', 'show']);
+});
 
 // Route API pour les variants
 Route::get('/api/products/{id}/variants', function ($id) {

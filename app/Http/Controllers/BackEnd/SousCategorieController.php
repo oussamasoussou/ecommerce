@@ -12,7 +12,7 @@ class SousCategorieController extends Controller
 {
     public function index()
     {
-        $sousCategories = SousCategorie::with('category')->paginate(10);
+        $sousCategories = SousCategorie::with('category')->paginate(5);
         return view('back-end.sous-categories.index', compact('sousCategories'));
     }
 

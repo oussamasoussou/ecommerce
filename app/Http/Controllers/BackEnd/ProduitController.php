@@ -25,7 +25,7 @@ class ProduitController extends Controller
     public function index()
     {
         // On charge seulement les variantes et la sous-catégorie
-        $produits = Produit::with(['sousCategorie', 'variants'])->paginate(10);
+        $produits = Produit::with(['sousCategorie', 'variants'])->paginate(5);
         return view('back-end.produits.index', compact('produits'));
     }
 

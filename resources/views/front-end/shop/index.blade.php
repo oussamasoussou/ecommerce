@@ -1,4 +1,6 @@
 @extends('front-end.layouts.app')
+
+@section('title', 'Boutique')
 @section('content')
     <main class="main">
         <div class="page-header mt-30 mb-50">
@@ -46,7 +48,7 @@
                                     <div class="product-img-action-wrap">
                                         <div class="product-img product-img-zoom">
                                             <a href="{{ route('shop.show', $produit->id) }}">
-                                                <img class="default-img" src="{{ asset('storage/' . $produit->image) }}"
+                                                <img class="default-img" src="{{ $produit->image_url }}"
                                                     alt="{{ $produit->nom }}" />
                                             </a>
                                         </div>
@@ -80,7 +82,7 @@
                                             <a aria-label="Vue rapide" class="action-btn quick-view-btn" data-bs-toggle="modal"
                                                 data-bs-target="#quickViewModal" data-product-id="{{ $produit->id }}"
                                                 data-product-name="{{ $produit->nom }}"
-                                                data-product-image="{{ asset('storage/' . $produit->image) }}"
+                                                data-product-image="{{ $produit->image_url }}"
                                                 data-product-price="{{ number_format($produit->prix_ttc, 2, ',', ' ') }}"
                                                 data-product-old-price="{{ $produit->prix_promotionnel ? number_format($produit->prix_ht, 2, ',', ' ') : '' }}"
                                                 data-product-description="{{ $produit->description ?? 'Aucune description disponible.' }}"
@@ -128,7 +130,7 @@
                                                     <button type="button" class="add add-to-cart-modal-btn" 
                                                             data-product-id="{{ $produit->id }}"
                                                             data-product-name="{{ $produit->nom }}"
-                                                            data-product-image="{{ asset('storage/' . $produit->image) }}"
+                                                            data-product-image="{{ $produit->image_url }}"
                                                             data-product-price="{{ number_format($produit->prix_promotionnel ?? $produit->prix_ttc, 2, ',', ' ') }} DT"
                                                             data-product-old-price="{{ $produit->prix_promotionnel ? number_format($produit->prix_ttc, 2, ',', ' ') : '' }}"
                                                             style="background: none; border: none; color: inherit; cursor: pointer;">

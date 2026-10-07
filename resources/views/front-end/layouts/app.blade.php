@@ -1,13 +1,22 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="fr">
 
 <head>
     <meta charset="utf-8" />
-    <title>Nest - Multipurpose eCommerce HTML Template</title>
+    @php
+        $shopName = config('shop.name', 'Dar El 3oula');
+        $pageTitle = trim($__env->yieldContent('title'));
+        $pageDescription = trim($__env->yieldContent('meta_description')) ?: config('shop.name') . ' : ' . config('shop.tagline') . '. Commande en ligne, paiement à la livraison partout en Tunisie.';
+    @endphp
+    <title>{{ $pageTitle ? $pageTitle . ' | ' . $shopName : $shopName . ' – ' . config('shop.tagline') }}</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <meta name="description" content="" />
+    <meta name="description" content="{{ \Illuminate\Support\Str::limit($pageDescription, 160) }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta property="og:image" content="" />
+    <meta property="og:site_name" content="{{ $shopName }}" />
+    <meta property="og:title" content="{{ $pageTitle ?: $shopName }}" />
+    <meta property="og:description" content="{{ \Illuminate\Support\Str::limit($pageDescription, 160) }}" />
+    <meta property="og:image" content="{{ trim($__env->yieldContent('og_image')) ?: asset('front-end/imgs/theme/dar_el_3oula_logo.svg') }}" />
+    <link rel="canonical" href="{{ url()->current() }}" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Favicon -->
@@ -28,6 +37,24 @@
 
     <!-- Ajoutez avant la fermeture de </body> -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Notification discrète en haut à droite (SweetAlert2), avec repli sur alert() si la librairie n'est pas chargée
+        window.showToast = function (type, message) {
+            if (typeof Swal === 'undefined') {
+                alert(message);
+                return;
+            }
+            Swal.fire({
+                icon: type === 'error' ? 'error' : (type === 'warning' ? 'warning' : 'success'),
+                text: message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+        };
+    </script>
 
 
     <style>
@@ -1083,8 +1110,7 @@
             // Vider le panier : géré plus bas (#clear-cart)
 
             function showNotification(type, message) {
-                // Vous pouvez utiliser Toastr, SweetAlert ou une simple alerte
-                alert(message);
+                window.showToast(type, message);
             }
         });
     </script>
@@ -1099,12 +1125,7 @@
 
             // Fonction pour afficher les notifications
             function showNotification(type, message) {
-                // Utilisez Toastr si disponible, sinon une alerte simple
-                if (typeof toastr !== 'undefined') {
-                    toastr[type](message);
-                } else {
-                    alert(message);
-                }
+                window.showToast(type, message);
             }
 
             // Fonction pour mettre à jour les totaux dans l'interface

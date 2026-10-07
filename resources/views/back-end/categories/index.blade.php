@@ -71,58 +71,13 @@
                         </tbody>
                     </table>
                 </div>
+
+                {{-- Pagination --}}
+                @include('back-end.partials.pagination', ['paginator' => $categories])
             </div>
         </div>
 
         {{-- Pagination améliorée --}}
-        @if($categories->hasPages())
-            <div class="pagination-area mt-30 mb-50">
-                <nav>
-                    <ul class="pagination justify-content-center">
-                        {{-- Previous Page Link --}}
-                        @if ($categories->onFirstPage())
-                            <li class="page-item disabled">
-                                <span class="page-link">&laquo;</span>
-                            </li>
-                        @else
-                            <li class="page-item">
-                                <a class="page-link" href="{{ $categories->previousPageUrl() }}" rel="prev">&laquo;</a>
-                            </li>
-                        @endif
-
-                        {{-- Pagination Elements --}}
-                        @foreach ($categories->getUrlRange(1, $categories->lastPage()) as $page => $url)
-                            @if ($page == $categories->currentPage())
-                                <li class="page-item active">
-                                    <span class="page-link">{{ $page }}</span>
-                                </li>
-                            @else
-                                <li class="page-item">
-                                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                                </li>
-                            @endif
-                        @endforeach
-
-                        {{-- Next Page Link --}}
-                        @if ($categories->hasMorePages())
-                            <li class="page-item">
-                                <a class="page-link" href="{{ $categories->nextPageUrl() }}" rel="next">&raquo;</a>
-                            </li>
-                        @else
-                            <li class="page-item disabled">
-                                <span class="page-link">&raquo;</span>
-                            </li>
-                        @endif
-                    </ul>
-                </nav>
-
-                {{-- Info sur la pagination --}}
-                <div class="text-center text-muted mt-2">
-                    Affichage de {{ $categories->firstItem() }} à {{ $categories->lastItem() }} sur {{ $categories->total() }}
-                    catégories
-                </div>
-            </div>
-        @endif
 
     </section>
 @endsection

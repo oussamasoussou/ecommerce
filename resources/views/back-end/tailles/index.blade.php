@@ -47,57 +47,13 @@
                     </tbody>
                 </table>
             </div>
+
+                {{-- Pagination --}}
+                @include('back-end.partials.pagination', ['paginator' => $tailles])
         </div>
     </div>
 
     {{-- Pagination --}}
-    @if($tailles->hasPages())
-    <div class="pagination-area mt-30 mb-50">
-        <nav>
-            <ul class="pagination justify-content-center">
-                {{-- Lien précédent --}}
-                @if ($tailles->onFirstPage())
-                    <li class="page-item disabled">
-                        <span class="page-link">&laquo;</span>
-                    </li>
-                @else
-                    <li class="page-item">
-                        <a class="page-link" href="{{ $tailles->previousPageUrl() }}" rel="prev">&laquo;</a>
-                    </li>
-                @endif
-
-                {{-- Numéros de pages --}}
-                @foreach ($tailles->getUrlRange(1, $tailles->lastPage()) as $page => $url)
-                    @if ($page == $tailles->currentPage())
-                        <li class="page-item active">
-                            <span class="page-link">{{ $page }}</span>
-                        </li>
-                    @else
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                        </li>
-                    @endif
-                @endforeach
-
-                {{-- Lien suivant --}}
-                @if ($tailles->hasMorePages())
-                    <li class="page-item">
-                        <a class="page-link" href="{{ $tailles->nextPageUrl() }}" rel="next">&raquo;</a>
-                    </li>
-                @else
-                    <li class="page-item disabled">
-                        <span class="page-link">&raquo;</span>
-                    </li>
-                @endif
-            </ul>
-        </nav>
-        
-        {{-- Informations de pagination --}}
-        <div class="text-center text-muted mt-2">
-            Affichage de {{ $tailles->firstItem() ?? 0 }} à {{ $tailles->lastItem() ?? 0 }} sur {{ $tailles->total() }} tailles
-        </div>
-    </div>
-    @endif
 
 </section>
 @endsection

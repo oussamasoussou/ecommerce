@@ -15,7 +15,7 @@ class DeliveryController extends Controller
      */
     public function index(): View
     {
-        $deliveries = Delivery::latest()->paginate(10);
+        $deliveries = Delivery::latest()->paginate(5);
         
         return view('back-end.deliveries.index', compact('deliveries'));
     }

@@ -43,57 +43,13 @@
                     </tbody>
                 </table>
             </div>
+
+                {{-- Pagination --}}
+                @include('back-end.partials.pagination', ['paginator' => $deliveries])
         </div>
     </div>
 
     {{-- Pagination --}}
-    @if($deliveries->hasPages())
-    <div class="pagination-area mt-30 mb-50">
-        <nav>
-            <ul class="pagination justify-content-center">
-                {{-- Lien précédent --}}
-                @if ($deliveries->onFirstPage())
-                    <li class="page-item disabled">
-                        <span class="page-link">&laquo;</span>
-                    </li>
-                @else
-                    <li class="page-item">
-                        <a class="page-link" href="{{ $deliveries->previousPageUrl() }}" rel="prev">&laquo;</a>
-                    </li>
-                @endif
-
-                {{-- Numéros de pages --}}
-                @foreach ($deliveries->getUrlRange(1, $deliveries->lastPage()) as $page => $url)
-                    @if ($page == $deliveries->currentPage())
-                        <li class="page-item active">
-                            <span class="page-link">{{ $page }}</span>
-                        </li>
-                    @else
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                        </li>
-                    @endif
-                @endforeach
-
-                {{-- Lien suivant --}}
-                @if ($deliveries->hasMorePages())
-                    <li class="page-item">
-                        <a class="page-link" href="{{ $deliveries->nextPageUrl() }}" rel="next">&raquo;</a>
-                    </li>
-                @else
-                    <li class="page-item disabled">
-                        <span class="page-link">&raquo;</span>
-                    </li>
-                @endif
-            </ul>
-        </nav>
-        
-        {{-- Informations de pagination --}}
-        <div class="text-center text-muted mt-2">
-            Affichage de {{ $deliveries->firstItem() ?? 0 }} à {{ $deliveries->lastItem() ?? 0 }} sur {{ $deliveries->total() }} prix de livraison
-        </div>
-    </div>
-    @endif
 
 </section>
 @endsection

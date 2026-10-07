@@ -49,57 +49,13 @@
                     </tbody>
                 </table>
             </div>
+
+                {{-- Pagination --}}
+                @include('back-end.partials.pagination', ['paginator' => $produits])
         </div>
     </div>
 
     {{-- Pagination --}}
-    @if($produits->hasPages())
-    <div class="pagination-area mt-30 mb-50">
-        <nav>
-            <ul class="pagination justify-content-center">
-                {{-- Lien précédent --}}
-                @if ($produits->onFirstPage())
-                    <li class="page-item disabled">
-                        <span class="page-link">&laquo;</span>
-                    </li>
-                @else
-                    <li class="page-item">
-                        <a class="page-link" href="{{ $produits->previousPageUrl() }}" rel="prev">&laquo;</a>
-                    </li>
-                @endif
-
-                {{-- Numéros de pages --}}
-                @foreach ($produits->getUrlRange(1, $produits->lastPage()) as $page => $url)
-                    @if ($page == $produits->currentPage())
-                        <li class="page-item active">
-                            <span class="page-link">{{ $page }}</span>
-                        </li>
-                    @else
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                        </li>
-                    @endif
-                @endforeach
-
-                {{-- Lien suivant --}}
-                @if ($produits->hasMorePages())
-                    <li class="page-item">
-                        <a class="page-link" href="{{ $produits->nextPageUrl() }}" rel="next">&raquo;</a>
-                    </li>
-                @else
-                    <li class="page-item disabled">
-                        <span class="page-link">&raquo;</span>
-                    </li>
-                @endif
-            </ul>
-        </nav>
-        
-        {{-- Informations de pagination --}}
-        <div class="text-center text-muted mt-2">
-            Affichage de {{ $produits->firstItem() ?? 0 }} à {{ $produits->lastItem() ?? 0 }} sur {{ $produits->total() }} produits
-        </div>
-    </div>
-    @endif
 
 </section>
 @endsection

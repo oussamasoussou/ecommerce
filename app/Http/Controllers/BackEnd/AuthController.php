@@ -22,6 +22,17 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+            // Seuls les administrateurs peuvent se connecter au back-office
+            if (!Auth::user()->isAdmin()) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return back()->withErrors([
+                    'email' => 'Les identifiants sont incorrects.',
+                ])->onlyInput('email');
+            }
+
             $request->session()->regenerate();
             return redirect()->intended(route('categories.index'));
         }

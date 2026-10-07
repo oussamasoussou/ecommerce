@@ -32,8 +32,11 @@ class ShopController extends Controller
 
         if ($request->filled('q')) {
             $q = $request->input('q');
-            $query->where('nom', 'like', "%{$q}%")
-                ->orWhere('description', 'like', "%{$q}%");
+            // Conditions groupées : sinon le orWhere contourne le filtre est_actif
+            $query->where(function ($sub) use ($q) {
+                $sub->where('nom', 'like', "%{$q}%")
+                    ->orWhere('description', 'like', "%{$q}%");
+            });
         }
 
         if ($request->filled('categorie')) {

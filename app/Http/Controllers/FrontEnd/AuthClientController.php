@@ -106,8 +106,8 @@ class AuthClientController extends Controller
                 'required', 'string', 'max:20',
                 // Le téléphone sert d'identifiant de connexion : il doit être unique, quel que soit le format
                 function ($attribute, $value, $fail) {
-                    if (strlen(User::normalizePhone($value)) < 8) {
-                        $fail('Le numéro de téléphone n\'est pas valide.');
+                    if (strlen(User::normalizePhone($value)) !== 8) {
+                        $fail('Le numéro de téléphone doit contenir 8 chiffres (ex. 20 123 456).');
                     } elseif (User::findByPhone($value)->isNotEmpty()) {
                         $fail('Ce numéro de téléphone est déjà utilisé par un autre compte.');
                     }

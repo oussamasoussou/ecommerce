@@ -66,6 +66,19 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    /** Rôles ayant accès au back-office */
+    public const ADMIN_ROLES = [1, 2]; // 1 = super-admin, 2 = admin
+
+    public function isAdmin(): bool
+    {
+        return in_array((int) $this->role_id, self::ADMIN_ROLES, true);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
     public function wishlists()
     {
         return $this->hasMany(Wishlist::class);

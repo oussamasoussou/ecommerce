@@ -89,7 +89,14 @@ class CartService
      */
     public function update(int $cartId, int $quantite): array
     {
-        $cartItem = Cart::find($cartId);
+        // Uniquement un article du panier de l'utilisateur / de la session en cours
+        $userId = Auth::id();
+        $cartItem = Cart::where('id', $cartId)
+            ->when($userId,
+                fn ($q) => $q->where('user_id', $userId),
+                fn ($q) => $q->whereNull('user_id')->where('session_id', session()->getId()))
+            ->first();
+
         if (!$cartItem) {
             return ['success' => false, 'message' => 'Article non trouvé'];
         }

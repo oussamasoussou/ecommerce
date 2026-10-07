@@ -6,7 +6,7 @@
     <title>Connexion - Tableau de bord</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/imgs/theme/favicon.svg') }}" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('back-end/imgs/theme/favicon.svg') }}" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

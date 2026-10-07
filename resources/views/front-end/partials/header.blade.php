@@ -1,7 +1,6 @@
 <header class="header-area header-style-1 header-style-5 header-height-2">
     <div class="mobile-promotion">
-        <span>Ouverture exceptionnelle, <strong>jusqu'à 15%</strong> de réduction sur tous les articles. Plus que
-            <strong>3 jours</strong> restants</span>
+        <span>{{ config('shop.tagline') }} — <strong>paiement à la livraison</strong></span>
     </div>
     <div class="header-top header-top-ptb-1 d-none d-lg-block">
         <div class="container">
@@ -13,9 +12,9 @@
                     <div class="text-center">
                         <div id="news-flash" class="d-inline-block">
                             <ul>
-                                <li>Livraison 100% sécurisée sans contact avec le livreur</li>
-                                <li>Super offres - Économisez plus avec des coupons</li>
-                                <li>Bijoux argent tendance, économisez jusqu'à 35% aujourd'hui</li>
+                                <li>Paiement à la livraison partout en Tunisie</li>
+                                <li>Livraison gratuite sur toutes les commandes</li>
+                                <li>Bsissa et produits traditionnels tunisiens</li>
                             </ul>
                         </div>
                     </div>
@@ -23,7 +22,13 @@
                 <div class="col-xl-3 col-lg-4">
                     <div class="header-info header-info-right">
                         <ul>
-                            <li>Besoin d'aide ? Appelez-nous : <strong class="text-brand"> + 1800 900</strong></li>
+                            @if (config('shop.phone'))
+                                <li>Besoin d'aide ? Appelez-nous :
+                                    <a href="tel:{{ preg_replace('/[^\d+]/', '', config('shop.phone')) }}"><strong class="text-brand">{{ config('shop.phone') }}</strong></a>
+                                </li>
+                            @else
+                                <li><a href="{{ route('pages.show', 'contact') }}">Besoin d'aide ? Contactez-nous</a></li>
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -34,7 +39,7 @@
         <div class="container">
             <div class="header-wrap">
                 <div class="logo logo-width-1">
-                    <a href="{{ url('/') }}"><img src="{{ asset('front-end/imgs/theme/dar_el_3oula.svg') }}" alt="logo" /></a>
+                    <a href="{{ url('/') }}"><img src="{{ asset('front-end/imgs/theme/dar_el_3oula.svg') }}" alt="{{ config('shop.name') }}" /></a>
                 </div>
                 <div class="header-right">
                     <div class="search-style-2">
@@ -61,7 +66,7 @@
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
                                 <a href="{{ route('wishlist.index') }}">
-                                    <img class="svgInject" alt="Nest"
+                                    <img class="svgInject" alt="Mes favoris"
                                         src="{{ asset('front-end/imgs/theme/icons/icon-heart.svg') }}" />
                                     <span class="pro-count blue">
                                         @auth
@@ -74,7 +79,7 @@
                             </div>
                             <div class="header-action-icon-2">
                                 <a class="mini-cart-icon" href="{{ route('cart.index') }}">
-                                    <img alt="Nest" src="{{ asset('front-end/imgs/theme/icons/icon-cart.svg') }}" />
+                                    <img alt="Mon panier" src="{{ asset('front-end/imgs/theme/icons/icon-cart.svg') }}" />
                                     <span class="pro-count blue cart-count">
                                         {{ App\Models\Cart::getCartCount() }}
                                     </span>
@@ -92,7 +97,7 @@
                                                     <li>
                                                         <div class="shopping-cart-img">
                                                             <a href="{{ route('shop.show', $item->produit_id) }}">
-                                                                <img src="{{ asset('storage/' . $item->produit->image) }}"
+                                                                <img src="{{ $item->produit->image_url }}"
                                                                     alt="{{ $item->produit->nom }}"
                                                                     style="width: 60px; height: 60px; object-fit: cover;">
                                                             </a>
@@ -143,22 +148,16 @@
                                 @auth
                                     <!-- Menu utilisateur connecté -->
                                     <div class="header-action-icon-2">
-                                        <a href="#">
-                                            <img class="svgInject" alt="Nest"
+                                        <a href="{{ route('account.profile') }}">
+                                            <img class="svgInject" alt="Mon compte"
                                                 src="{{ asset('front-end/imgs/theme/icons/icon-user.svg') }}" />
                                         </a>
-                                        <a href="#"><span class="lable ml-0">Mon Compte</span></a>
+                                        <a href="{{ route('account.profile') }}"><span class="lable ml-0">Mon Compte</span></a>
                                         <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
                                             <ul>
-                                                <li><a href="#"><i class="fi fi-rs-user mr-10"></i>Mon Compte</a></li>
-                                                <li><a href="#"><i class="fi fi-rs-location-alt mr-10"></i>Suivi de
-                                                        commande</a></li>
-                                                <li><a href="#"><i class="fi fi-rs-label mr-10"></i>Mes Bons de
-                                                        réduction</a></li>
-                                                <li><a href="shop-wishlist.html"><i class="fi fi-rs-heart mr-10"></i>Ma
-                                                        Liste de souhaits</a></li>
-                                                <li><a href="#"><i
-                                                            class="fi fi-rs-settings-sliders mr-10"></i>Paramètres</a></li>
+                                                <li><a href="{{ route('account.profile') }}"><i class="fi fi-rs-user mr-10"></i>Mon profil</a></li>
+                                                <li><a href="{{ route('account.orders') }}"><i class="fi fi-rs-location-alt mr-10"></i>Mes commandes</a></li>
+                                                <li><a href="{{ route('wishlist.index') }}"><i class="fi fi-rs-heart mr-10"></i>Mes favoris</a></li>
                                                 <li>
                                                     <form method="POST" action="{{ route('frontend.logout') }}"
                                                         id="logout-form">
@@ -176,7 +175,7 @@
                                     <!-- Lien de connexion -->
                                     <div class="header-action-icon-2">
                                         <a href="{{ route('frontend.login') }}">
-                                            <img class="svgInject" alt="Nest"
+                                            <img class="svgInject" alt="Mon compte"
                                                 src="{{ asset('front-end/imgs/theme/icons/icon-user.svg') }}" />
                                         </a>
                                         <a href="{{ route('frontend.login') }}"><span
@@ -194,7 +193,7 @@
         <div class="container">
             <div class="header-wrap header-space-between position-relative">
                 <div class="logo logo-width-1 d-block d-lg-none">
-                    <a href="{{ url('/') }}"><img src="{{ asset('front-end/imgs/theme/dar_el_3oula.svg') }}" alt="logo" /></a>
+                    <a href="{{ url('/') }}"><img src="{{ asset('front-end/imgs/theme/dar_el_3oula.svg') }}" alt="{{ config('shop.name') }}" /></a>
                 </div>
                 <div class="header-nav d-none d-lg-flex">
                     <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block font-heading">
@@ -231,28 +230,18 @@
                                                     <div class="menu-banner-wrap">
                                                         <a
                                                             href="{{ route('shop.index', ['categorie' => $category->sousCategories->first()->id ?? '']) }}">
-                                                            <img src="{{ asset('storage/' . $category->image) }}"
-                                                                style="height: 322px; width: 508px;">
-                                                            <a alt="{{ $category->name }}" />
+                                                            <img src="{{ $category->image ? asset('storage/' . $category->image) : asset('front-end/imgs/theme/no-image.svg') }}"
+                                                                alt="{{ $category->name }}" loading="lazy"
+                                                                style="height: 322px; width: 508px; object-fit: cover;">
                                                         </a>
                                                         <div class="menu-banner-content">
-                                                            <h4>Offres spéciales</h4>
+                                                            <h4>{{ config('shop.name') }}</h4>
                                                             <h3>Découvrez {{ $category->name }}</h3>
-                                                            <div class="menu-banner-price">
-                                                                <span class="new-price text-success">Économisez jusqu'à
-                                                                    50%</span>
-                                                            </div>
                                                             <div class="menu-banner-btn">
                                                                 <a
                                                                     href="{{ route('shop.index', ['categorie' => $category->sousCategories->first()->id ?? '']) }}">Acheter
                                                                     maintenant</a>
                                                             </div>
-                                                        </div>
-                                                        <div class="menu-banner-discount">
-                                                            <h3>
-                                                                <span>25%</span>
-                                                                de réduction
-                                                            </h3>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -283,7 +272,7 @@
     <div class="mobile-header-wrapper-inner">
         <div class="mobile-header-top">
             <div class="mobile-header-logo">
-                <a href="{{ url('/') }}"><img src="{{ asset('front-end/imgs/theme/dar_el_3oula.svg') }}" alt="logo" /></a>
+                <a href="{{ url('/') }}"><img src="{{ asset('front-end/imgs/theme/dar_el_3oula.svg') }}" alt="{{ config('shop.name') }}" /></a>
             </div>
             <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                 <button class="close-style search-close">
@@ -294,9 +283,9 @@
         </div>
         <div class="mobile-header-content-area">
             <div class="mobile-search search-style-3 mobile-header-border">
-                <form action="#">
-                    <input type="text" placeholder="Rechercher des articles…" />
-                    <button type="submit"><i class="fi-rs-search"></i></button>
+                <form action="{{ route('frontend.search') }}" method="GET">
+                    <input type="text" name="q" placeholder="Rechercher des articles…" value="{{ request('q') }}" />
+                    <button type="submit" aria-label="Rechercher"><i class="fi-rs-search"></i></button>
                 </form>
             </div>
             <div class="mobile-menu-wrap mobile-header-border">
@@ -327,29 +316,23 @@
             </div>
             <div class="mobile-header-info-wrap">
                 <div class="single-mobile-header-info">
-                    <a href="page-contact.html"><i class="fi-rs-marker"></i> Notre localisation</a>
+                    <a href="{{ route('pages.show', 'contact') }}"><i class="fi-rs-marker"></i> Nous contacter</a>
                 </div>
                 <div class="single-mobile-header-info">
-                    <a href="page-login.html"><i class="fi-rs-user"></i>Connexion / Inscription</a>
+                    @auth
+                        <a href="{{ route('account.profile') }}"><i class="fi-rs-user"></i>Mon compte</a>
+                    @else
+                        <a href="{{ route('frontend.login') }}"><i class="fi-rs-user"></i>Connexion / Inscription</a>
+                    @endauth
                 </div>
-                <div class="single-mobile-header-info">
-                    <a href="#"><i class="fi-rs-headphones"></i>(+01) - 2345 - 6789</a>
-                </div>
+                @if (config('shop.phone'))
+                    <div class="single-mobile-header-info">
+                        <a href="tel:{{ preg_replace('/[^\d+]/', '', config('shop.phone')) }}"><i class="fi-rs-headphones"></i>{{ config('shop.phone') }}</a>
+                    </div>
+                @endif
             </div>
-            <div class="mobile-social-icon mb-50">
-                <h6 class="mb-15">Suivez-nous</h6>
-                <a href="#"><img src="{{ asset('front-end/imgs/theme/icons/icon-facebook-white.svg') }}"
-                        alt="Facebook" /></a>
-                <a href="#"><img src="{{ asset('front-end/imgs/theme/icons/icon-twitter-white.svg') }}"
-                        alt="Twitter" /></a>
-                <a href="#"><img src="{{ asset('front-end/imgs/theme/icons/icon-instagram-white.svg') }}"
-                        alt="Instagram" /></a>
-                <a href="#"><img src="{{ asset('front-end/imgs/theme/icons/icon-pinterest-white.svg') }}"
-                        alt="Pinterest" /></a>
-                <a href="#"><img src="{{ asset('front-end/imgs/theme/icons/icon-youtube-white.svg') }}"
-                        alt="YouTube" /></a>
-            </div>
-            <div class="site-copyright">Copyright 2025 © Nest. Tous droits réservés. Propulsé par AliThemes.</div>
+            @include('front-end.partials._social', ['class' => 'mobile-social-icon mb-50', 'titleClass' => 'mb-15'])
+            <div class="site-copyright">&copy; {{ date('Y') }} {{ config('shop.name') }}. Tous droits réservés.</div>
         </div>
     </div>
 </div>

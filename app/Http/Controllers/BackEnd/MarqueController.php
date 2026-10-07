@@ -14,7 +14,7 @@ class MarqueController extends Controller
      */
     public function index()
     {
-        $marques = Marque::latest()->get();
+        $marques = Marque::latest()->paginate(5);
         return view('back-end.marques.index', compact('marques'));
     }
 

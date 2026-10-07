@@ -60,7 +60,7 @@ class SearchController extends Controller
             $produitsQuery->where('sous_categorie_id', $categoryId);
         }
 
-        $produits = $produitsQuery->paginate(12);
+        $produits = $produitsQuery->paginate(12)->withQueryString();
 
         return view('front-end.search.search-results', compact('produits', 'query', 'categoryId'));
     }

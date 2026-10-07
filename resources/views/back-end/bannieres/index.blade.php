@@ -81,57 +81,13 @@
                     </tbody>
                 </table>
             </div>
+
+                {{-- Pagination --}}
+                @include('back-end.partials.pagination', ['paginator' => $bannieres])
         </div>
     </div>
 
     {{-- Pagination --}}
-    @if($bannieres->hasPages())
-    <div class="pagination-area mt-30 mb-50">
-        <nav>
-            <ul class="pagination justify-content-center">
-                {{-- Lien précédent --}}
-                @if ($bannieres->onFirstPage())
-                    <li class="page-item disabled">
-                        <span class="page-link">&laquo;</span>
-                    </li>
-                @else
-                    <li class="page-item">
-                        <a class="page-link" href="{{ $bannieres->previousPageUrl() }}" rel="prev">&laquo;</a>
-                    </li>
-                @endif
-
-                {{-- Numéros de pages --}}
-                @foreach ($bannieres->getUrlRange(1, $bannieres->lastPage()) as $page => $url)
-                    @if ($page == $bannieres->currentPage())
-                        <li class="page-item active">
-                            <span class="page-link">{{ $page }}</span>
-                        </li>
-                    @else
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                        </li>
-                    @endif
-                @endforeach
-
-                {{-- Lien suivant --}}
-                @if ($bannieres->hasMorePages())
-                    <li class="page-item">
-                        <a class="page-link" href="{{ $bannieres->nextPageUrl() }}" rel="next">&raquo;</a>
-                    </li>
-                @else
-                    <li class="page-item disabled">
-                        <span class="page-link">&raquo;</span>
-                    </li>
-                @endif
-            </ul>
-        </nav>
-        
-        {{-- Informations de pagination --}}
-        <div class="text-center text-muted mt-2">
-            Affichage de {{ $bannieres->firstItem() ?? 0 }} à {{ $bannieres->lastItem() ?? 0 }} sur {{ $bannieres->total() }} bannières
-        </div>
-    </div>
-    @endif
 
 </section>
 @endsection

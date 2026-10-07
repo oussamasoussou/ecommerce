@@ -1,5 +1,7 @@
 @extends('front-end.layouts.app')
 
+@section('title', 'Résultats de recherche')
+
 @section('content')
 <main class="main">
     <div class="page-header mt-30 mb-50">
@@ -84,7 +86,7 @@
                                     <div class="product-img product-img-zoom">
                                         <a href="{{ route('shop.show', $produit->id) }}">
                                             <img class="default-img" 
-                                                 src="{{ $produit->image ? asset('storage/' . $produit->image) : asset('front-end/imgs/shop/product-1-1.jpg') }}" 
+                                                 src="{{ $produit->image_url }}" 
                                                  alt="{{ $produit->nom }}" />
                                         </a>
                                     </div>
@@ -129,11 +131,14 @@
                         @endforeach
                     </div>
 
-                  
+                    <!-- Pagination -->
+                    <div class="pagination-area mt-20 mb-20">
+                        {{ $produits->links() }}
+                    </div>
                 @else
                     <div class="text-center py-5">
                         <div class="empty-search">
-                            <img src="{{ asset('front-end/imgs/theme/empty-search.svg') }}" alt="Aucun résultat" style="max-width: 200px;" class="mb-4">
+                            <img src="{{ asset('front-end/imgs/theme/no-image.svg') }}" alt="" style="max-width: 140px;" class="mb-4">
                             <h4 class="mb-3">Aucun produit trouvé</h4>
                             <p class="text-muted mb-4">Essayez de modifier vos critères de recherche</p>
                             <a href="{{ route('shop.index') }}" class="btn btn-default">Voir tous les produits</a>

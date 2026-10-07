@@ -1,5 +1,9 @@
 @extends('front-end.layouts.app')
 
+@section('title', $produit->nom)
+@section('meta_description', \Illuminate\Support\Str::limit(strip_tags($produit->description ?: $produit->long_description ?: $produit->nom), 155))
+@section('og_image', $produit->image_url)
+
 @section('content')
     <main class="main">
         <div class="page-header breadcrumb-wrap">
@@ -20,7 +24,7 @@
                                     <div class="product-image-slider">
                                         @if ($produit->image)
                                             <figure class="border-radius-10 main-slide active">
-                                                <img src="{{ asset('storage/' . $produit->image) }}"
+                                                <img src="{{ $produit->image_url }}"
                                                      alt="{{ $produit->nom }}"
                                                      class="img-fluid product-detail-main-img"
                                                      data-index="0">
@@ -40,7 +44,7 @@
                                     <div class="slider-nav-thumbnails">
                                         @if ($produit->image)
                                             <div class="thumbnail-item active" data-index="0">
-                                                <img src="{{ asset('storage/' . $produit->image) }}"
+                                                <img src="{{ $produit->image_url }}"
                                                      alt="{{ $produit->nom }}"
                                                      class="img-fluid thumbnail-img">
                                             </div>
@@ -66,7 +70,7 @@
                                         <span class="stock-status out-stock">Sale Off</span>
                                     @endif
 
-                                    <h2 class="title-detail">{{ $produit->nom }}</h2>
+                                    <h1 class="title-detail">{{ $produit->nom }}</h1>
 
                                     <div class="product-detail-rating">
                                         <div class="product-rate-cover text-end">
@@ -266,7 +270,7 @@
                                                             <a href="{{ route('shop.show', $relatedProduct->id) }}">
                                                                 @if($relatedProduct->image)
                                                                     <img class="default-img"
-                                                                         src="{{ asset('storage/' . $relatedProduct->image) }}"
+                                                                         src="{{ $relatedProduct->image_url }}"
                                                                          alt="{{ $relatedProduct->nom }}"
                                                                          style="height: 200px; object-fit: cover;">
                                                                 @else
@@ -301,7 +305,7 @@
                                                                     class="action-btn add-to-cart-modal-btn"
                                                                     data-product-id="{{ $relatedProduct->id }}"
                                                                     data-product-name="{{ $relatedProduct->nom }}"
-                                                                    data-product-image="{{ $relatedProduct->image ? asset('storage/' . $relatedProduct->image) : asset('images/default-product.jpg') }}"
+                                                                    data-product-image="{{ $relatedProduct->image_url }}"
                                                                     data-product-price="{{ number_format($relatedProduct->prix_promotionnel ?? $relatedProduct->prix_ttc, 2) }} DT">
                                                                     <i class="fi-rs-shopping-cart"></i>
                                                                 </button>

@@ -11,7 +11,7 @@ class BanniereController extends Controller
 {
     public function index()
     {
-        $bannieres = Banniere::orderBy('position')->paginate(10);
+        $bannieres = Banniere::orderBy('position')->paginate(5);
         return view('back-end.bannieres.index', compact('bannieres'));
     }
 

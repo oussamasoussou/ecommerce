@@ -72,57 +72,13 @@
                     </tbody>
                 </table>
             </div>
+
+                {{-- Pagination --}}
+                @include('back-end.partials.pagination', ['paginator' => $sousCategories])
         </div>
     </div>
 
     {{-- Pagination --}}
-    @if($sousCategories->hasPages())
-    <div class="pagination-area mt-30 mb-50">
-        <nav>
-            <ul class="pagination justify-content-center">
-                {{-- Lien précédent --}}
-                @if ($sousCategories->onFirstPage())
-                    <li class="page-item disabled">
-                        <span class="page-link">&laquo;</span>
-                    </li>
-                @else
-                    <li class="page-item">
-                        <a class="page-link" href="{{ $sousCategories->previousPageUrl() }}" rel="prev">&laquo;</a>
-                    </li>
-                @endif
-
-                {{-- Numéros de pages --}}
-                @foreach ($sousCategories->getUrlRange(1, $sousCategories->lastPage()) as $page => $url)
-                    @if ($page == $sousCategories->currentPage())
-                        <li class="page-item active">
-                            <span class="page-link">{{ $page }}</span>
-                        </li>
-                    @else
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                        </li>
-                    @endif
-                @endforeach
-
-                {{-- Lien suivant --}}
-                @if ($sousCategories->hasMorePages())
-                    <li class="page-item">
-                        <a class="page-link" href="{{ $sousCategories->nextPageUrl() }}" rel="next">&raquo;</a>
-                    </li>
-                @else
-                    <li class="page-item disabled">
-                        <span class="page-link">&raquo;</span>
-                    </li>
-                @endif
-            </ul>
-        </nav>
-        
-        {{-- Informations de pagination --}}
-        <div class="text-center text-muted mt-2">
-            Affichage de {{ $sousCategories->firstItem() ?? 0 }} à {{ $sousCategories->lastItem() ?? 0 }} sur {{ $sousCategories->total() }} sous-catégories
-        </div>
-    </div>
-    @endif
 
 </section>
 @endsection

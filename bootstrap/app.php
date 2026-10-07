@@ -18,6 +18,10 @@ return Application::configure(basePath: dirname(__DIR__))
             SyncCart::class,
         ]);
 
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
+        ]);
+
         // Visiteurs non connectés : login client pour la boutique, login admin pour le back-office
         $middleware->redirectGuestsTo(function (Request $request) {
             return $request->is('wishlist*', 'account*', 'cart*', 'orders*')

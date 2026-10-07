@@ -1,7 +1,7 @@
 <aside class="navbar-aside" id="offcanvas_aside">
     <div class="aside-top"> 
-        <a href="#" class="brand-wrap"> 
-            <img src="{{ asset('assets/imgs/theme/logo.svg') }}" class="logo" alt="Dashboard" /> 
+        <a href="{{ route('admin.orders.index') }}" class="brand-wrap">
+            <img src="{{ asset('front-end/imgs/theme/dar_el_3oula.svg') }}" class="logo" alt="{{ config('shop.name') }} – Administration" />
         </a>
         <div> 
             <button class="btn btn-icon btn-aside-minimize"> 
@@ -10,9 +10,23 @@
         </div>
     </div>
     <nav>
-        <ul class="menu-aside"> 
+        <ul class="menu-aside">
+            <!-- Commandes -->
+            @php($pendingOrders = \App\Models\Order::where('status', 'pending')->count())
+            <li class="menu-item {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
+                <a class="menu-link" href="{{ route('admin.orders.index') }}">
+                    <i class="icon material-icons md-receipt_long"></i>
+                    <span class="text">
+                        Commandes
+                        @if ($pendingOrders > 0)
+                            <span class="badge bg-warning text-dark ms-1" title="Commandes en attente">{{ $pendingOrders }}</span>
+                        @endif
+                    </span>
+                </a>
+            </li>
+
             <!-- Bannières -->
-            <li class="menu-item has-submenu {{ request()->routeIs('marques.*') ? 'active' : '' }}">
+            <li class="menu-item has-submenu {{ request()->routeIs('bannieres.*', 'sliders.*') ? 'active' : '' }}">
                 <a class="menu-link" href="#">
                     <i class="icon material-icons md-home"></i>
                     <span class="text">Affichage Accueil Client</span>
@@ -95,13 +109,14 @@
                 </div>
             </li>
             <!-- Livraisons -->
-            <li class="menu-item has-submenu {{ request()->routeIs('produits.*') ? 'active' : '' }}"> 
-                <a class="menu-link" href="#"> 
-                    <i class="icon material-icons md-shopping_bag"></i> 
-                    <span class="text">Livraison</span> 
+            <li class="menu-item has-submenu {{ request()->routeIs('deliveries.*') ? 'active' : '' }}">
+                <a class="menu-link" href="#">
+                    <i class="icon material-icons md-local_shipping"></i>
+                    <span class="text">Livraison</span>
                 </a>
                 <div class="submenu">
-                    <a href="{{ route('deliveries.index') }}">prix des Livraison</a>
+                    <a href="{{ route('deliveries.index') }}">Prix de livraison</a>
+                    <a href="{{ route('deliveries.create') }}">Ajouter un prix</a>
                 </div>
             </li>
         </ul>

@@ -10,7 +10,7 @@ class CouleurController extends Controller
 {
     public function index()
     {
-        $couleurs = Couleur::paginate(10);
+        $couleurs = Couleur::paginate(5);
         return view('back-end.couleurs.index', compact('couleurs'));
     }
 

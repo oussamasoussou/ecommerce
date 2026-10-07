@@ -11,7 +11,7 @@ class TailleController extends Controller
 {
     public function index()
     {
-        $tailles = Taille::paginate(10);
+        $tailles = Taille::paginate(5);
         return view('back-end.tailles.index', compact('tailles'));
     }
 

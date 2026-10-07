@@ -1,5 +1,7 @@
 @extends('front-end.layouts.app')
 
+@section('title', 'Mon panier')
+
 @section('content')
     <style>
         .cart-table .btn-remove {
@@ -93,7 +95,7 @@
                                                 <div class="d-flex align-items-center">
                                                     <a href="{{ route('shop.show', $item->produit_id) }}" class="me-3"
                                                         style="width: 80px;">
-                                                        <img src="{{ asset('storage/' . $item->produit->image) }}"
+                                                        <img src="{{ $item->produit->image_url }}"
                                                             alt="{{ $item->produit->nom }}" class="img-fluid rounded"
                                                             style="width: 80px; height: 80px; object-fit: cover;">
                                                     </a>

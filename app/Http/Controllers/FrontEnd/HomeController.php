@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Banniere;
 use App\Models\Slider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\Produit;
 use App\Models\SousCategorie;
@@ -31,7 +32,10 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
-        $sliders = Slider::actif()->ordonne()->get();
+        // On ignore les slides dont l'image n'existe pas (sinon image cassée sur l'accueil)
+        $sliders = Slider::actif()->ordonne()->get()
+            ->filter(fn ($slider) => $slider->image && Storage::disk('public')->exists($slider->image))
+            ->values();
         $bannieres = Banniere::actif()->get();
         
         // Produits populaires pour la section "Products Tabs"

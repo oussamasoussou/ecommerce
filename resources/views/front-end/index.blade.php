@@ -63,9 +63,10 @@
                                         <div class="single-hero-slider single-animation-wrap"
                                             style="background-image: url({{ asset('storage/' . $slider->image) }})">
                                             <div class="slider-content">
-                                                <h1 class="display-2 mb-40">
+                                                {{-- Un seul <h1> par page : le titre de la première slide --}}
+                                                <{{ $loop->first ? 'h1' : 'h2' }} class="display-2 mb-40">
                                                     {{ $slider->titre }}
-                                                </h1>
+                                                </{{ $loop->first ? 'h1' : 'h2' }}>
                                                 @if($slider->sous_titre)
                                                     <p class="mb-65">{{ $slider->sous_titre }}</p>
                                                 @endif
@@ -85,12 +86,12 @@
                                 <div class="hero-slider-1 style-5 dot-style-1 dot-style-1-position-2">
                                     <!-- Slider par défaut si aucun slider n'est configuré -->
                                     <div class="single-hero-slider single-animation-wrap"
-                                        style="background-image: url(assets/imgs/slider/slider-7.png)">
+                                        style="background-image: url({{ asset('front-end/imgs/slider/slider-1.png') }})">
                                         <div class="slider-content">
                                             <h1 class="display-2 mb-40">
-                                                Bienvenue sur notre site
+                                                Bienvenue chez {{ config('shop.name') }}
                                             </h1>
-                                            <p class="mb-65">Découvrez nos meilleures offres</p>
+                                            <p class="mb-65">{{ config('shop.tagline') }}</p>
                                             <a href="{{ route('shop.index') }}" class="btn btn-primary">Voir les produits</a>
                                         </div>
                                     </div>
@@ -219,7 +220,7 @@
                                 <div class="product-img product-img-zoom">
                                     <a href="{{ route('shop.show', $produit->id) }}">
                                         @if($produit->image)
-                                            <img class="default-img" src="{{ asset('storage/' . $produit->image) }}" alt="{{ $produit->nom }}" />
+                                            <img class="default-img" src="{{ $produit->image_url }}" alt="{{ $produit->nom }}" />
                                         @else
                                             <img class="default-img" src="{{ asset('front-end/imgs/shop/product-' . (($loop->index % 10) + 1) . '-1.jpg') }}" alt="{{ $produit->nom }}" />
                                         @endif
@@ -332,7 +333,7 @@
                                 <div class="product-img product-img-zoom">
                                     <a href="{{ route('shop.show', $produit->id) }}">
                                         @if($produit->image)
-                                            <img class="default-img" src="{{ asset('storage/' . $produit->image) }}" alt="{{ $produit->nom }}" />
+                                            <img class="default-img" src="{{ $produit->image_url }}" alt="{{ $produit->nom }}" />
                                         @else
                                             <img class="default-img" src="{{ asset('front-end/imgs/shop/product-' . (($loop->index % 10) + 1) . '-1.jpg') }}" alt="{{ $produit->nom }}" />
                                         @endif
@@ -385,7 +386,7 @@
                                             <button type="button" class="add add-to-cart-modal-btn" 
                                                     data-product-id="{{ $produit->id }}"
                                                     data-product-name="{{ $produit->nom }}"
-                                                    data-product-image="{{ asset('storage/' . $produit->image) }}"
+                                                    data-product-image="{{ $produit->image_url }}"
                                                     data-product-price="{{ number_format($produit->prix_promotionnel ?? $produit->prix_ttc, 2, ',', ' ') }} DT"
                                                     data-product-old-price="{{ $produit->prix_promotionnel ? number_format($produit->prix_ttc, 2, ',', ' ') : '' }}"
                                                     style="background: none; border: none; color: inherit; cursor: pointer;">

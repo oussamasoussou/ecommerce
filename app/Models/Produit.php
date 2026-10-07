@@ -140,4 +140,15 @@ class Produit extends Model
         )->where('est_actif', true);
     }
 
+    /**
+     * URL de l'image principale, ou une image par défaut si le produit n'en a pas.
+     * Utilisation dans les vues : $produit->image_url
+     */
+    public function getImageUrlAttribute(): string
+    {
+        return $this->image
+            ? asset('storage/' . $this->image)
+            : asset('front-end/imgs/theme/no-image.svg');
+    }
+
 }

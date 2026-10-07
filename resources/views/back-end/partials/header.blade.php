@@ -1,58 +1,51 @@
 <header class="main-header navbar">
+    {{-- Recherche rapide de commande (n°, nom ou téléphone) --}}
     <div class="col-search">
-        <form class="searchform">
+        <form class="searchform" method="GET" action="{{ route('admin.orders.index') }}">
             <div class="input-group">
-                <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
-                <button class="btn btn-light bg" type="button"><i class="material-icons md-search"></i></button>
+                <input type="search" name="q" class="form-control" value="{{ request()->routeIs('admin.orders.*') ? request('q') : '' }}"
+                       placeholder="N° de commande, nom ou téléphone" aria-label="Rechercher une commande" />
+                <button class="btn btn-light bg" type="submit" aria-label="Rechercher"><i class="material-icons md-search"></i></button>
             </div>
-            <datalist id="search_terms">
-                <option value="Products"></option>
-                <option value="New orders"></option>
-                <option value="Apple iphone"></option>
-                <option value="Ahmed Hassan"></option>
-            </datalist>
         </form>
     </div>
     <div class="col-nav">
-        <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i
+        <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside" aria-label="Menu"><i
                 class="material-icons md-apps"></i></button>
         <ul class="nav">
+            {{-- Commandes en attente --}}
+            @php($pendingCount = \App\Models\Order::where('status', 'pending')->count())
             <li class="nav-item">
-                <a class="nav-link btn-icon" href="#">
-                    <i class="material-icons md-notifications animation-shake"></i>
-                    <span class="badge rounded-pill">3</span>
+                <a class="nav-link btn-icon" href="{{ route('admin.orders.index', ['status' => 'pending']) }}"
+                   title="{{ $pendingCount }} commande(s) en attente">
+                    <i class="material-icons md-notifications {{ $pendingCount ? 'animation-shake' : '' }}"></i>
+                    @if ($pendingCount)
+                        <span class="badge rounded-pill">{{ $pendingCount }}</span>
+                    @endif
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                <a class="nav-link btn-icon darkmode" href="#" title="Mode sombre"> <i class="material-icons md-nights_stay"></i> </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
-            </li>
-            <li class="dropdown nav-item">
-                <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage"
-                    aria-expanded="false"><i class="material-icons md-public"></i></a>
-                <div class="dropdown-menu dropdown-menu-start" aria-labelledby="dropdownLanguage">
-                    <a class="dropdown-item text-brand" href="#"><img src="assets/imgs/theme/flag-us.png"
-                            alt="English" />English</a>
-                    <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-fr.png"
-                            alt="Français" />Français</a>
-                    <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-jp.png" alt="Français" />日本語</a>
-                    <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-cn.png" alt="Français" />中国人</a>
-                </div>
+                <a href="#" class="requestfullscreen nav-link btn-icon" title="Plein écran"><i class="material-icons md-cast"></i></a>
             </li>
             <li class="dropdown nav-item">
                 <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
-                    aria-expanded="false"> <img class="img-xs rounded-circle" src="assets/imgs/people/avatar-2.png"
-                        alt="User" /></a>
+                    aria-expanded="false" title="Mon compte">
+                    <img class="img-xs rounded-circle" src="{{ asset('back-end/imgs/people/avatar-2.png') }}" alt="Mon compte" />
+                </a>
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                    <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
-                    <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
-                    <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                    <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
-                    <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                    @auth
+                        <span class="dropdown-item-text small text-muted">
+                            {{ trim(auth()->user()->firstname . ' ' . auth()->user()->lastname) ?: auth()->user()->email }}
+                        </span>
+                        <div class="dropdown-divider"></div>
+                    @endauth
+                    <a class="dropdown-item" href="{{ url('/') }}" target="_blank" rel="noopener">
+                        <i class="material-icons md-storefront"></i>Voir la boutique
+                    </a>
                     <div class="dropdown-divider"></div>
-                    <!-- 🔹 Bouton Déconnexion -->
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="dropdown-item text-danger">
@@ -60,7 +53,6 @@
                         </button>
                     </form>
                 </div>
-                
             </li>
         </ul>
     </div>

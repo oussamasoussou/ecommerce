@@ -1,22 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="utf-8" />
-    <title>Nest Dashboard</title>
+    <title>Administration – {{ config('shop.name') }}</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta property="og:title" content="" />
-    <meta property="og:type" content="" />
-    <meta property="og:url" content="" />
-    <meta property="og:image" content="" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="back-end/imgs/theme/favicon.svg" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('back-end/imgs/theme/favicon.svg') }}" />
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('back-end/css/main.css?v=6.1') }}" type="text/css" />
+    <style>
+        /* Pagination aux couleurs du back-office (vert) au lieu du bleu Bootstrap */
+        .pagination {
+            --bs-pagination-color: #3BB77E;
+            --bs-pagination-hover-color: #29A56C;
+            --bs-pagination-focus-color: #29A56C;
+            --bs-pagination-focus-box-shadow: 0 0 0 .2rem rgba(59, 183, 126, .25);
+            --bs-pagination-active-bg: #3BB77E;
+            --bs-pagination-active-border-color: #3BB77E;
+        }
+    </style>
     <script src="{{ asset('back-end/js/vendors/color-modes.js') }}"></script>
 </head>
 
@@ -243,6 +251,8 @@
         });
     </script>
 
+    {{-- Scripts propres à chaque page (@push('scripts')) --}}
+    @stack('scripts')
 </body>
 
 </html>

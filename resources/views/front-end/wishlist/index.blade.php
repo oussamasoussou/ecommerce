@@ -1,5 +1,7 @@
 @extends('front-end.layouts.app')
 
+@section('title', 'Mes favoris')
+
 @section('content')
 <main class="main">
     <div class="page-header breadcrumb-wrap">
@@ -40,7 +42,7 @@
                                     <label class="form-check-label" for="exampleCheckbox{{ $produit->id }}"></label>
                                 </td>
                                 <td class="image product-thumbnail" style="padding-top: 20px !important;">
-                                    <img src="{{ $produit->image ? asset('storage/' . $produit->image) : asset('front-end/imgs/shop/product-1-1.jpg') }}" 
+                                    <img src="{{ $produit->image_url }}" 
                                          alt="{{ $produit->nom }}" />
                                 </td>
                                 <td class="product-des product-name">

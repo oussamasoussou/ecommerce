@@ -76,6 +76,9 @@
                     </tbody>
                 </table>
             </div>
+
+                {{-- Pagination --}}
+                @include('back-end.partials.pagination', ['paginator' => $marques])
         </div>
     </div>
 

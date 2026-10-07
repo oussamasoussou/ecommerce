@@ -5,8 +5,10 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Exceptions\OrderException;
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\User;
 use App\Models\Category;
 use App\Models\SousCategorie;
 
@@ -61,7 +63,14 @@ class CheckoutController extends Controller
         $request->validate([
             'billing.nom' => 'required|string|max:255',
             'billing.adresse' => 'required|string|max:255',
-            'billing.telephone' => 'required|string|max:20',
+            'billing.telephone' => [
+                'required', 'string', 'max:20',
+                function ($attribute, $value, $fail) {
+                    if (strlen(User::normalizePhone($value)) !== 8) {
+                        $fail('Le numéro de téléphone doit contenir 8 chiffres (ex. 20 123 456).');
+                    }
+                },
+            ],
         ], [
             'billing.nom.required' => 'Le nom complet est obligatoire.',
             'billing.adresse.required' => "L'adresse de livraison est obligatoire.",
@@ -87,7 +96,11 @@ class CheckoutController extends Controller
         $userId = $user ? $user->id : null;
 
         // Crée la commande (statut "pending" jusqu'à la livraison) et décrémente les stocks
-        $order = $orderController->createFromCart($userId, $cart, $request->billing);
+        try {
+            $order = $orderController->createFromCart($userId, $cart, $request->billing);
+        } catch (OrderException $e) {
+            return response()->json(['error' => $e->getMessage()], 422);
+        }
 
         // Vider le panier
         Cart::clearCart();
